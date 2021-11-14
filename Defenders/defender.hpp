@@ -29,6 +29,9 @@ namespace Defend{
         [[nodiscard]] int get_type() const{
             return type;
         };
+        virtual int atack(int )=0;
+        virtual int atack(std::vector<Enemy::Enemies> )=0;
+        virtual void levelup()=0;
     };
 
     class Wall :public Defender{
@@ -37,8 +40,9 @@ namespace Defend{
         Wall(){
         type=1;
     };
-        int attack(int damage);
+        int atack(int damage) override;
     };
+
     class  Tower : public Defender{
     private:
         int radius;
@@ -51,8 +55,8 @@ namespace Defend{
             damage=10;
             speed=10;
         };
-        void levelup ();
-        [[nodiscard]] int attack(std::vector<Enemy::Enemies>) const;
+        void levelup () override;
+        int atack(std::vector<Enemy::Enemies>) override;
     };
 }
 #endif //BIG_PROJECT_DEFENDER_HPP

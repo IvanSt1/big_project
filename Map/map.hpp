@@ -18,49 +18,74 @@ namespace map1 {
         std::pair<int, int> coordinate;
         std::vector<Enemy::Enemies> en;
         Defend::Defender *defend;
+        int distance_from_castle;
     public:
-        Cell(){
-            coordinate=std::make_pair(0,0);
-            defend=nullptr;
-        }
-        Cell(int x, int y) {
-            coordinate=std::make_pair(x, y);
+        Cell() {
+            coordinate = std::make_pair(0, 0);
+            distance_from_castle = -1;
             defend = nullptr;
         }
 
-        [[nodiscard]] std::pair<int,int> get_coordinate() const {
+        Cell(int x, int y) {
+            coordinate = std::make_pair(x, y);
+            distance_from_castle = -1;
+            defend = nullptr;
+        }
+
+        [[nodiscard]] std::pair<int, int> get_coordinate() const {
             return coordinate;
         }
 
         [[nodiscard]] int get_type() const {
             return type;
         }
-        [[nodiscard]] Defend::Defender* get_defend() const {
+
+        [[nodiscard]] Defend::Defender *get_defend() const {
             return defend;
         }
+
+        [[nodiscard]] int get_distance() const {
+            return distance_from_castle;
+        }
+
         int add_enemy(Enemy::Enemies x);
 
         int add_defend(Defend::Defender &x);
+
+        bool change_distance(int x) {
+            if (distance_from_castle == -1) {
+                distance_from_castle = x+1;
+                return true;
+            }
+            else{
+                if ((distance_from_castle > (x + 1))) {
+                    distance_from_castle = x + 1;
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
     };
 
     class Plain : public Cell {
     private:
     public:
-        Plain(int x, int y) : Cell(x,y){
+        Plain(int x, int y) : Cell(x, y) {
             type = 1;
         }
     };
 
     class Mountain : public Cell {
     public:
-        Mountain(int x, int y) : Cell(x,y){
+        Mountain(int x, int y) : Cell(x, y) {
             type = 2;
         }
     };
 
     class Water : public Cell {
     public:
-        Water(int x, int y) : Cell(x,y){
+        Water(int x, int y) : Cell(x, y) {
             type = 3;
         }
     };
@@ -68,43 +93,37 @@ namespace map1 {
     class Castle : public Cell {
     private:
     public:
-        Castle(int x, int y) : Cell(x,y){
+        Castle(int x, int y) : Cell(x, y) {
             type = 4;
+            distance_from_castle=0;
         }
     };
 
     class Lair : public Cell {
     public:
-        Lair(int x, int y) : Cell(x,y) {
+        Lair(int x, int y) : Cell(x, y) {
             type = 5;
         }
     };
-    struct search{
-        map1::Cell el;
-        int weight=0;
-        search *previous= nullptr;
-    };
+
 
     class Map {
     private:
         int max_x;
         int max_y;
         std::vector<std::vector<Cell>> Cells;
-        std::vector<Cell> way1;
-        std::vector<Cell> way2;
-        std::vector<Cell> way3;
-        Castle* C;
+        Castle *C;
         Lair *L;
     public:
         Map(int x1, int y1);
-        std::vector<Cell> light_way(const Castle &castle, const Lair &lair) const;
-        std::vector<Cell> heavy_way(const Castle &castle, const Lair &lair) const;
-        std::vector<Cell> plane_way(const Castle &castle, const Lair &lair) const;
-        [[nodiscard]] std::vector<std::vector<Cell>> get_map() const{
+
+        void distance(const Castle &castle, const Lair &lair);
+
+        [[nodiscard]] std::vector<std::vector<Cell>> get_map() const {
             return Cells;
         }
-        void draw_to_terminal();
-        void draw();
+
+        void draw() const;
     };
 }
 #endif //BIG_PROJECT_DEFENDER_HPP

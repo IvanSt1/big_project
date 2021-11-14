@@ -47,6 +47,7 @@ namespace Enemy {
         int regeneration();
         int get_aura(int sp,int regen, int h);
         int lost_aura();
+
     };
 
     class Light : public Enemies {
