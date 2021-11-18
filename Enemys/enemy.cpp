@@ -3,25 +3,17 @@
 
 namespace Enemy {
     int Enemies::get_damage(int d) {
-        hp-=d;
-        if (hp<0){
+        hp -= d;
+        if ((hp+aura_hp) < 0) {
             return 0;
-        }
-        else{
+        } else {
             return 1;
         }
     }
-
-
-
-    int Enemies::move() {
-        return 0;
-    }
-
     int Enemies::regeneration() {
-        hp+=regeneration_speed;
-        if (hp>max_hp){
-            hp=max_hp;
+        hp += regeneration_speed+aura_reg;
+        if (hp > max_hp+aura_hp) {
+            hp = max_hp+aura_hp;
         }
         return 0;
     }
@@ -36,7 +28,7 @@ namespace Enemy {
 
     void Hero::give_aura(std::vector<Enemies> v) {
         std::vector<Enemies>::iterator i;
-        for (i=v.begin();i!=v.end();i++){
+        for (i = v.begin(); i != v.end(); i++) {
 
         }
     }

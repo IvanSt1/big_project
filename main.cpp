@@ -2,9 +2,9 @@
 #include "Map/map.hpp"
 int main() {
     int x,y;
-    x=15;
-    y=15;
+    x=5;
+    y=5;
     map1::Map karta(x,y);
-    karta.draw();
+    karta.play();
     return 0;
 }
