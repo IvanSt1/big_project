@@ -37,6 +37,13 @@ namespace map1 {
             distance_for_plane = -1;
             defend = nullptr;
         }
+        Cell(int x, int y, int t) {
+            coordinate = std::make_pair(x, y);
+            distance_from_castle = -1;
+            distance_for_plane = -1;
+            defend = nullptr;
+            type=t;
+        }
 
         [[nodiscard]] std::pair<int, int> get_coordinate() const {
             return coordinate;
@@ -96,28 +103,6 @@ namespace map1 {
         }
     };
 
-    class Plain : public Cell {
-    private:
-    public:
-        Plain(int x, int y) : Cell(x, y) {
-            type = 1;
-        }
-    };
-
-    class Mountain : public Cell {
-    public:
-        Mountain(int x, int y) : Cell(x, y) {
-            type = 2;
-        }
-    };
-
-    class Water : public Cell {
-    public:
-        Water(int x, int y) : Cell(x, y) {
-            type = 3;
-        }
-    };
-
     class Castle : public Cell {
     private:
     public:
@@ -143,12 +128,12 @@ namespace map1 {
         int max_x;
         int max_y;
         std::vector<std::vector<Cell>> Cells;
-        Cell *C;
-        int hp=1000;
+        Castle *C;
+        int hp;
         int money;
-        Cell *L;
+        Lair *L;
         std::vector<Cell*> Cells_with_enemy;
-
+        sf::RenderWindow window;
         void distance();
 
         void distance_for_plane();
@@ -158,21 +143,24 @@ namespace map1 {
         int where_to_go_for_heavy(int x, int y);
 
         int where_to_go_for_plane(int x, int y);
-
-    public:
-        Map(int x1, int y1);
-
+        Table<int, std::vector<int>> Tower_Table;
         [[nodiscard]] std::vector<std::vector<Cell>> get_map() const {
             return Cells;
         }
-
-        void draw() const;
-
+        void draw() ;
+        void draw_enemies();
         void go();
+        Table<int, std::vector<int>> get_table(){
+            return Tower_Table;
+        };
+    public:
+        Map();
 
+        Map(int x1, int y1);
+
+        void resize(int x1, int y1);
         void play();
-
     };
 }
-#endif //BIG_PROJECT_DEFENDER_HPP
+#endif //BIG_PROJECT_MAP_HPP
 

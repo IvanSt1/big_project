@@ -1,7 +1,7 @@
 #include <iostream>
 #include "map.hpp"
 #include <random>
-#include <SFML/Graphics.hpp>
+
 
 namespace map1 {
     int Cell::add_enemy(Enemy::Enemies *x) {
@@ -22,10 +22,18 @@ namespace map1 {
                 break;
             }
         }
+
     }
 
 
     Map::Map(int x1, int y1) {
+        hp = 100000;
+        int t;
+        Tower_Table.push(1, {200, 1, 10, 10});
+        Tower_Table.push(2, {200, 2, 15, 15});
+        Tower_Table.push(3, {400, 2, 20, 20});
+        Tower_Table.push(4, {500, 3, 30, 30});
+        Tower_Table.push(5, {600, 3, 40, 40});
         max_x = x1;
         max_y = y1;
         auto gen_x = [this]() {
@@ -54,12 +62,12 @@ namespace map1 {
         y = max_y - 1 - gen_y();
         Castle castle(x, y);
         Cells[x][y] = castle;
-        C = &Cells[x][y];
+        C = static_cast<Castle *>(&Cells[x][y]);
         x = gen_x();
         y = gen_y();
         Lair lair(x, y);
         Cells[x][y] = lair;
-        L = &(Cells[x][y]);
+        L = static_cast<Lair *>(&(Cells[x][y]));
         do {
             x = 0;
             for (i = Cells.begin(); i != Cells.end(); i++) {
@@ -67,35 +75,33 @@ namespace map1 {
                 for (j = i->begin(); j != i->end(); j++) {
                     choice = gen_choice();
                     if (j->get_type() == 0 or j->get_type() == 1 or j->get_type() == 2 or j->get_type() == 3) {
-                        Plain plain(x, y);
-                        Mountain mountain(x, y);
-                        Water water(x, y);
                         switch (choice) {
                             case 1:
-                                *j = plain;
+                                t = 1;
                                 break;
                             case 2:
-                                *j = mountain;
+                                t = 2;
                                 break;
                             case 3:
-                                *j = plain;
+                                t = 1;
                                 break;
                             case 4:
-                                *j = plain;
+                                t = 3;
                                 break;
                             case 5:
-                                *j = water;
+                                t = 1;
                                 break;
                             case 6:
-                                *j = plain;
+                                t = 3;
                                 break;
                             case 7:
-                                *j = plain;
+                                t = 1;
                                 break;
                             case 8:
-                                *j = water;
+                                t = 2;
                                 break;
                         }
+                        *j = Cell(x, y, t);
                     }
                     y++;
                 }
@@ -104,6 +110,7 @@ namespace map1 {
             distance();
         } while (L->get_distance() == -1);
         distance_for_plane();
+        window.create(sf::VideoMode(max_x * 64, max_y * 64), "SFML works!");
         Cells_with_enemy.push_back(L);
     }
 
@@ -148,84 +155,89 @@ namespace map1 {
         };
     }
 
-    void Map::draw() const {
+    void Map::draw() {
         int t;
         std::vector<Cell>::iterator way, next;
-        sf::RenderWindow window(sf::VideoMode(max_x * 64, max_y * 64), "SFML works!");
+        sf::Sprite sprite;
         sf::Image plain_image, water_image, mountain_image, castle_image, lair_image, light_image, heavy_image, plane_image;
         plain_image.loadFromFile("../Map/Image/plain.png");
         water_image.loadFromFile("../Map/Image/water.png");
         mountain_image.loadFromFile("../Map/Image/mountain.png");
         castle_image.loadFromFile("../Map/Image/castle.png");
         lair_image.loadFromFile("../Map/Image/lair.png");
-        light_image.loadFromFile("../Map/Image/Light.png");
-        heavy_image.loadFromFile("../Map/Image/Heavy.png");
-        plane_image.loadFromFile("../Map/Image/plane.png");
         sf::Texture plain_texture, water_texture, mountain_texture, castle_texture, lair_texture, light_texture, heavy_texture, plane_texture;
         plain_texture.loadFromImage(plain_image);
         water_texture.loadFromImage(water_image);
         mountain_texture.loadFromImage(mountain_image);
         castle_texture.loadFromImage(castle_image);
         lair_texture.loadFromImage(lair_image);
+        for (int i = 0; i < max_y; i++) {
+            for (int j = 0; j < max_x; j++) {
+                t = get_map()[j][i].get_type();
+                switch (t) {
+                    case 0:
+                        break;
+                    case 1:
+                        sprite.setTexture(plain_texture);
+                        break;
+                    case 2:
+                        sprite.setTexture(mountain_texture);
+                        break;
+                    case 3:
+                        sprite.setTexture(water_texture);
+                        break;
+                    case 4:
+                        sprite.setTexture(castle_texture);
+                        break;
+                    case 5:
+                        sprite.setTexture(lair_texture);
+                        break;
+                }
+                sprite.setPosition(j * 64, i * 64);
+                window.draw(sprite);
+            }
+        }
+
+    }
+
+    void Map::draw_enemies() {
+        int t, x, y;
+        std::vector<Cell>::iterator way, next;
+        sf::Image plain_image, water_image, mountain_image, castle_image, lair_image, light_image, heavy_image, plane_image;
+        light_image.loadFromFile("../Map/Image/Light.png");
+        heavy_image.loadFromFile("../Map/Image/Heavy.png");
+        plane_image.loadFromFile("../Map/Image/plane.png");
+        sf::Texture plain_texture, water_texture, mountain_texture, castle_texture, lair_texture, light_texture, heavy_texture, plane_texture;
         light_texture.loadFromImage(light_image);
         heavy_texture.loadFromImage(heavy_image);
         plane_texture.loadFromImage(plane_image);
-        sf::Sprite map_sprite, enemy_sprite;
-        while (window.isOpen()) {
-            sf::Event event{};
-            while (window.pollEvent(event)) {
-                if (event.type == sf::Event::Closed)
-                    window.close();
+        sf::Sprite enemy_sprite;
+        std::vector<Cell *>::iterator i;
+        for (i = Cells_with_enemy.begin(); i != Cells_with_enemy.end(); i++) {
+            t = (*i)->get_enemies()[0]->get_type();
+            x = (*i)->get_coordinate().first;
+            y = (*i)->get_coordinate().second;
+            switch (t) {
+                case 0:
+                    break;
+                case 1:
+                    enemy_sprite.setTexture(light_texture);
+                    break;
+                case 2:
+                    enemy_sprite.setTexture(heavy_texture);
+                    break;
+                case 3:
+                    enemy_sprite.setTexture(plane_texture);
+                    break;
+                case 4:
+                    enemy_sprite.setTexture(castle_texture);
+                    break;
+                case 5:
+                    enemy_sprite.setTexture(lair_texture);
+                    break;
             }
-            window.clear();
-            for (int i = 0; i < max_y; i++) {
-                for (int j = 0; j < max_x; j++) {
-                    t = get_map()[j][i].get_type();
-                    switch (t) {
-                        case 0:
-                            break;
-                        case 1:
-                            map_sprite.setTexture(plain_texture);
-                            break;
-                        case 2:
-                            map_sprite.setTexture(mountain_texture);
-                            break;
-                        case 3:
-                            map_sprite.setTexture(water_texture);
-                            break;
-                        case 4:
-                            map_sprite.setTexture(castle_texture);
-                            break;
-                        case 5:
-                            map_sprite.setTexture(lair_texture);
-                            break;
-                    }
-                    if (!get_map()[j][i].get_enemies().empty()) {
-                        t = get_map()[j][i].get_enemies()[0]->get_type();
-                        enemy_sprite.setPosition(j * 64 + 16, i * 64 + 16);
-                        switch (t) {
-                            case 0:
-                                break;
-                            case 1:
-                                enemy_sprite.setTexture(light_texture);
-                                break;
-                            case 2:
-                                enemy_sprite.setTexture(heavy_texture);
-                                break;
-                            case 3:
-                                enemy_sprite.setTexture(plane_texture);
-                                break;
-                        }
-                        window.draw(enemy_sprite);
-                    }
-                    map_sprite.setPosition(j * 64, i * 64);
-                    window.draw(map_sprite);
-
-                }
-            }
-            window.display();
-
-
+            enemy_sprite.setPosition(x * 64 + 16, y * 64 + 16);
+            window.draw(enemy_sprite);
         }
     }
 
@@ -237,27 +249,23 @@ namespace map1 {
             static std::uniform_int_distribution<int> distr(1, 3);
             return distr(rng);
         };
-
-        while (hp > 0) {
-            for (int i = 0; i < 3; i++) {
-                switch (gen()) {
-                    case 1:
-                        new_enemy = new Enemy::Light;
-                        break;
-                    case 2:
-                        new_enemy = new Enemy::Heavy;
-                        break;
-                    case 3:
-                        new_enemy = new Enemy::Plane;
-                        break;
+        while (window.isOpen() and hp > 0) {
+            sf::Event event{};
+            while (window.pollEvent(event)) {
+                if (event.type == sf::Event::Closed) {
+                    window.close();
                 }
-                L->add_enemy(new_enemy);
             }
-            go();
-            //draw();
-        }
-        if (hp <= 0) {
-            std::cout << "ПРОИГРАЛ";
+            while (hp > 0) {
+                L->spawn();
+                go();
+                window.clear();
+                draw();
+                // draw_enemies();
+            }
+            if (hp <= 0) {
+                std::cout << "ПРОИГРАЛ";
+            }
         }
     }
 
@@ -307,13 +315,15 @@ namespace map1 {
     }
 
     void Map::go() {
-        int x = 0, y = 0, k, t, kol = 0;
+        int x = 0, y = 0, k, t;
+        Cell *cell;
         bool b1, b2, b3, b4;
         std::vector<Enemy::Enemies *> p;
         std::vector<Cell *>::iterator i;
         std::vector<Cell *> plus;
         std::vector<Enemy::Enemies *>::iterator e;
         for (i = Cells_with_enemy.begin(); i != Cells_with_enemy.end(); ++i) {
+            cell = (*i);
             p = (*i)->get_enemies();
             x = (*i)->get_coordinate().first;
             y = (*i)->get_coordinate().second;
@@ -324,6 +334,10 @@ namespace map1 {
             for (e = p.begin(); e != p.end(); e++) {
                 if (x == C->get_coordinate().first and y == C->get_coordinate().second) {
                     hp -= (*e)->get_hp() * (*e)->get_k();
+                    Cells[x][y].kill(*e);
+                } else if (cell->get_defend() != nullptr and cell->get_defend()->get_type() == 1) {
+                    cell->get_defend()->atack((*e)->get_hp() * (*e)->get_k());
+                    Cells[x][y].kill(*e);
                 } else {
                     Enemy::Enemies enemy;
                     if ((*(*e)).moving()) {
@@ -383,17 +397,18 @@ namespace map1 {
                                 break;
 
                         }
-                        kol++;
                     }
                 }
             }
             if ((*i)->get_enemies().empty()) {
-                Cells_with_enemy.erase(i);
+                i = Cells_with_enemy.erase(i) - 1;
             }
         }
         if (!plus.empty()) {
             for (i = plus.begin(); i != plus.end(); ++i) {
-                Cells_with_enemy.push_back(*i);
+                auto it = std::find(Cells_with_enemy.begin(), Cells_with_enemy.end(), *i);
+                if (it == Cells_with_enemy.end())
+                    Cells_with_enemy.push_back(*i);
             }
         }
     }
@@ -528,6 +543,31 @@ namespace map1 {
         return t;
     }
 
+    Map::Map() {
+        max_x = 0;
+        max_y = 0;
+        money = 0;
+        hp = 0;
+        C = nullptr;
+        L = nullptr;
+        Tower_Table.push(1, {200, 1, 10, 10});
+        Tower_Table.push(2, {200, 2, 15, 15});
+        Tower_Table.push(3, {400, 2, 20, 20});
+        Tower_Table.push(4, {500, 3, 30, 30});
+        Tower_Table.push(5, {600, 3, 40, 40});
+    }
+
+    void Map::resize(int x1, int y1) {
+        max_x = x1;
+        max_y = y1;
+        Cells.resize(max_x);
+        std::vector<std::vector<Cell>>::iterator i;
+        std::vector<Cell>::iterator j;
+        for (i = Cells.begin(); i != Cells.end(); i++) {
+            i->resize(max_y);
+        }
+    }
+
 
     void Lair::spawn() {
         int choice;
@@ -538,18 +578,7 @@ namespace map1 {
             return distr(rng);
         };
         for (int i = 0; i < 10; i++) {
-            choice = gen();
-            switch ((choice)) {
-                case 1:
-                    new_enemy = new Enemy::Light;
-                    break;
-                case 2:
-                    new_enemy = new Enemy::Heavy;
-                    break;
-                case 3:
-                    new_enemy = new Enemy::Plane;
-                    break;
-            }
+            new_enemy = new Enemy::Enemies(gen());
             add_enemy(new_enemy);
         }
     }

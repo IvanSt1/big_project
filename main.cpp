@@ -2,8 +2,8 @@
 #include "Map/map.hpp"
 int main() {
     int x,y;
-    x=5;
-    y=5;
+    x=10;
+    y=10;
     map1::Map karta(x,y);
     karta.play();
     return 0;

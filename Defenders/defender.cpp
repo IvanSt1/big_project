@@ -1,9 +1,7 @@
 #include "defender.hpp"
  void Defend::Tower::levelup() {
+
     level++;
-    damage+=10;
-    speed+=5;
-    radius++;
 
 }
 
@@ -12,5 +10,17 @@ int Defend::Tower::atack(std::vector<Enemy::Enemies>) {
 }
 
 int Defend::Wall::atack(int damage) {
-    return 0;
+    hp-=damage;
+    if (hp>0){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+
+Defend::Wall::Wall() {
+    type=1;
+    max_hp=500;
+    hp=max_hp;
 }

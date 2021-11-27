@@ -7,6 +7,7 @@
 
 #include <vector>
 
+
 namespace Enemy {
     class Enemies {
     protected:
@@ -14,6 +15,7 @@ namespace Enemy {
         int max_hp;
         int regeneration_speed;
         int speed;
+        int max_speed;
         int k;
         int type;
         int aura_hp;
@@ -30,6 +32,37 @@ namespace Enemy {
             aura_hp = 0;
             aura_reg = 0;
             aura_speed = 0;
+            max_speed=speed;
+        };
+
+        Enemies(int t) {
+            type = t;
+            aura_hp = 0;
+            aura_reg = 0;
+            aura_speed = 0;
+            if (t == 1) {
+                hp = 100;
+                max_hp = 100;
+                regeneration_speed = 5;
+                speed = 20;
+                k = 1;
+            }
+            if (t == 2) {
+                hp = 100;
+                max_hp = 100;
+                regeneration_speed = 5;
+                speed = 30;
+                k = 1;
+            }
+            if (t == 3) {
+                hp = 100;
+                max_hp = 100;
+                regeneration_speed = 5;
+                speed = 30;
+                k = 1;
+            }
+            max_speed=speed;
+
         };
 
         int get_hp() {
@@ -46,88 +79,23 @@ namespace Enemy {
 
         int get_damage(int d);
 
-        virtual bool moving() {
-            return true;
-        };
-
         int regeneration();
 
         int get_aura(int sp, int regen, int h);
 
         int lost_aura();
 
-
-    };
-
-    class Light : public Enemies {
-    private:
-    public:
-        Light() {
-            type = 1;
-            hp = 100;
-            max_hp = 100;
-            regeneration_speed = 5;
-            speed = 3;
-            k = 1;
-        };
-
         bool moving() {
-            speed--;
+            speed -= (1 + aura_speed);
             if (speed == 0) {
-                speed = 3;
+                speed = max_speed;
                 return true;
             } else {
                 return false;
             }
-        }
-    };
 
-    class Heavy : public Enemies {
-    private:
-    public:
-        Heavy() {
-            type = 2;
-            hp = 100;
-            max_hp = 100;
-            regeneration_speed = 5;
-            speed = 5;
-            k = 1;
         };
 
-        bool moving() {
-            speed--;
-            if (speed == 0) {
-                speed = 5;
-                return true;
-
-            } else {
-                return false;
-            }
-        }
-
-    };
-
-    class Plane : public Enemies {
-    private:
-    public:
-        Plane() {
-            type = 3;
-            hp = 100;
-            max_hp = 100;
-            regeneration_speed = 5;
-            speed = 3;
-            k = 1;
-        };
-
-        bool moving() {
-            speed--;
-            if (speed == 0) {
-                speed = 3;
-                return true;
-            } else {
-                return false;
-            }
-        }
     };
 
     class Hero : public Enemies {
@@ -146,14 +114,9 @@ namespace Enemy {
             aura_speed = sp;
             type = 4;
         }
-
-        bool moving() {
-            speed--;
-            return true;
-        }
-
         void give_aura(std::vector<Enemies>);
 
     };
 }
+
 #endif //BIG_PROJECT_ENEMY_HPP
