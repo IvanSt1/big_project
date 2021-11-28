@@ -4,26 +4,6 @@
 
 
 namespace map1 {
-    int Cell::add_enemy(Enemy::Enemies *x) {
-        en.push_back(x);
-        return 0;
-    }
-
-    int Cell::add_defend(Defend::Defender &x) {
-        defend = &x;
-        return 0;
-    }
-
-    void Cell::kill(Enemy::Enemies *x) {
-        std::vector<Enemy::Enemies *>::iterator i;
-        for (i = en.begin(); i != en.end(); i++) {
-            if (((*i)) == x) {
-                en.erase(i);
-                break;
-            }
-        }
-
-    }
 
 
     Map::Map(int x1, int y1) {
@@ -110,8 +90,6 @@ namespace map1 {
             distance();
         } while (L->get_distance() == -1);
         distance_for_plane();
-        window.create(sf::VideoMode(max_x * 64, max_y * 64), "SFML works!");
-        Cells_with_enemy.push_back(L);
     }
 
     void Map::distance() {
@@ -200,72 +178,15 @@ namespace map1 {
 
     }
 
-    void Map::draw_enemies() {
-        int t, x, y;
-        std::vector<Cell>::iterator way, next;
-        sf::Image plain_image, water_image, mountain_image, castle_image, lair_image, light_image, heavy_image, plane_image;
-        light_image.loadFromFile("../Map/Image/Light.png");
-        heavy_image.loadFromFile("../Map/Image/Heavy.png");
-        plane_image.loadFromFile("../Map/Image/plane.png");
-        sf::Texture plain_texture, water_texture, mountain_texture, castle_texture, lair_texture, light_texture, heavy_texture, plane_texture;
-        light_texture.loadFromImage(light_image);
-        heavy_texture.loadFromImage(heavy_image);
-        plane_texture.loadFromImage(plane_image);
-        sf::Sprite enemy_sprite;
-        std::vector<Cell *>::iterator i;
-        for (i = Cells_with_enemy.begin(); i != Cells_with_enemy.end(); i++) {
-            t = (*i)->get_enemies()[0]->get_type();
-            x = (*i)->get_coordinate().first;
-            y = (*i)->get_coordinate().second;
-            switch (t) {
-                case 0:
-                    break;
-                case 1:
-                    enemy_sprite.setTexture(light_texture);
-                    break;
-                case 2:
-                    enemy_sprite.setTexture(heavy_texture);
-                    break;
-                case 3:
-                    enemy_sprite.setTexture(plane_texture);
-                    break;
-                case 4:
-                    enemy_sprite.setTexture(castle_texture);
-                    break;
-                case 5:
-                    enemy_sprite.setTexture(lair_texture);
-                    break;
-            }
-            enemy_sprite.setPosition(x * 64 + 16, y * 64 + 16);
-            window.draw(enemy_sprite);
-        }
-    }
 
     void Map::play() {
         int x;
-        Enemy::Enemies *new_enemy;
-        auto gen = []() {
-            static std::mt19937 rng{std::random_device()()};
-            static std::uniform_int_distribution<int> distr(1, 3);
-            return distr(rng);
-        };
-        while (window.isOpen() and hp > 0) {
-            sf::Event event{};
-            while (window.pollEvent(event)) {
-                if (event.type == sf::Event::Closed) {
-                    window.close();
-                }
-            }
-            while (hp > 0) {
-                L->spawn();
-                go();
-                window.clear();
-                draw();
-                // draw_enemies();
-            }
-            if (hp <= 0) {
-                std::cout << "ПРОИГРАЛ";
-            }
+        while (hp > 0) {
+            add_enemies(L->spawn());
+            go();
+        }
+        if (hp <= 0) {
+            std::cout << "ПРОИГРАЛ";
         }
     }
 
@@ -316,101 +237,54 @@ namespace map1 {
 
     void Map::go() {
         int x = 0, y = 0, k, t;
-        Cell *cell;
-        bool b1, b2, b3, b4;
-        std::vector<Enemy::Enemies *> p;
-        std::vector<Cell *>::iterator i;
-        std::vector<Cell *> plus;
         std::vector<Enemy::Enemies *>::iterator e;
-        for (i = Cells_with_enemy.begin(); i != Cells_with_enemy.end(); ++i) {
-            cell = (*i);
-            p = (*i)->get_enemies();
-            x = (*i)->get_coordinate().first;
-            y = (*i)->get_coordinate().second;
-            b1 = true;
-            b2 = true;
-            b3 = true;
-            b4 = true;
-            for (e = p.begin(); e != p.end(); e++) {
-                if (x == C->get_coordinate().first and y == C->get_coordinate().second) {
-                    hp -= (*e)->get_hp() * (*e)->get_k();
-                    Cells[x][y].kill(*e);
-                } else if (cell->get_defend() != nullptr and cell->get_defend()->get_type() == 1) {
-                    cell->get_defend()->atack((*e)->get_hp() * (*e)->get_k());
-                    Cells[x][y].kill(*e);
-                } else {
-                    Enemy::Enemies enemy;
-                    if ((*(*e)).moving()) {
-                        k = (*e)->get_type();
-                        switch (k) {
-                            case 1:
-                                t = where_to_go(x, y);
-                                break;
-                            case 2:
-                                t = where_to_go_for_heavy(x, y);
-                                break;
-                            case 3:
-                                t = where_to_go_for_plane(x, y);
-                                break;
-                            case 4:
-                                t = where_to_go(x, y);
-                                break;
-                        }
-                        switch (t) {
-                            case 0:
-                                break;
-                            case 1:
-                                Cells[x - 1][y].add_enemy(*e);
-                                Cells[x][y].kill(*e);
-                                if (b1) {
-                                    plus.push_back(&Cells[x - 1][y]);
-                                    b1 = false;
-                                }
+        for (e = enemies.begin(); e != enemies.end(); e++) {
+            x = (*e)->get_coor().first;
+            y = (*e)->get_coor().second;
+            if (x == C->get_coordinate().first and y == C->get_coordinate().second) {
+                hp -= (*e)->get_hp() * (*e)->get_k();
+                e = enemies.erase(e);
+            } else if (Cells[x][y].get_defend() != nullptr and Cells[x][y].get_defend()->get_type() == 1) {
+                Cells[x][y].get_defend()->get_damage((*e)->get_hp() * (*e)->get_k());
+                e = enemies.erase(e);
+            } else {
+                if ((*e)->moving()) {
+                    k = (*e)->get_type();
+                    switch (k) {
+                        case 1:
+                            t = where_to_go(x, y);
+                            break;
+                        case 2:
+                            t = where_to_go_for_heavy(x, y);
+                            break;
+                        case 3:
+                            t = where_to_go_for_plane(x, y);
+                            break;
+                        case 4:
+                            t = where_to_go(x, y);
+                            break;
+                    }
+                    switch (t) {
+                        case 0:
+                            break;
+                        case 1:
+                            (*e)->change_coor(std::make_pair(x - 1, y));
+                            break;
+                        case 2:
+                            (*e)->change_coor(std::make_pair(x + 1, y));
+                            break;
+                        case 3:
+                            (*e)->change_coor(std::make_pair(x, y - 1));
+                            break;
+                        case 4:
+                            (*e)->change_coor(std::make_pair(x, y + 1));
+                            break;
 
-                                break;
-                            case 2:
-                                Cells[x + 1][y].add_enemy(*e);
-                                Cells[x][y].kill(*e);
-                                if (b2) {
-                                    b2 = false;
-                                    plus.push_back(&Cells[x + 1][y]);
-
-                                }
-                                break;
-                            case 3:
-                                Cells[x][y - 1].add_enemy(*e);
-                                Cells[x][y].kill(*e);
-                                if (b3) {
-                                    b3 = false;
-                                    plus.push_back(&Cells[x][y - 1]);
-
-                                }
-                                break;
-                            case 4:
-                                Cells[x][y + 1].add_enemy(*e);
-                                Cells[x][y].kill(*e);
-                                if (b4) {
-                                    b4 = false;
-                                    plus.push_back(&Cells[x][y + 1]);
-
-                                }
-                                break;
-
-                        }
                     }
                 }
             }
-            if ((*i)->get_enemies().empty()) {
-                i = Cells_with_enemy.erase(i) - 1;
-            }
         }
-        if (!plus.empty()) {
-            for (i = plus.begin(); i != plus.end(); ++i) {
-                auto it = std::find(Cells_with_enemy.begin(), Cells_with_enemy.end(), *i);
-                if (it == Cells_with_enemy.end())
-                    Cells_with_enemy.push_back(*i);
-            }
-        }
+
     }
 
     int Map::where_to_go(int x, int y) {
@@ -568,19 +442,11 @@ namespace map1 {
         }
     }
 
-
-    void Lair::spawn() {
-        int choice;
-        Enemy::Enemies *new_enemy;
-        auto gen = []() {
-            static std::mt19937 rng{std::random_device()()};
-            static std::uniform_int_distribution<int> distr(1, 3);
-            return distr(rng);
-        };
-        for (int i = 0; i < 10; i++) {
-            new_enemy = new Enemy::Enemies(gen());
-            add_enemy(new_enemy);
+    void Map::add_enemies(std::vector<Enemy::Enemies *> mas) {
+        for (auto i: mas) {
+            enemies.push_back(i);
         }
     }
+
 }
 

@@ -4,5 +4,13 @@
 
 #ifndef BIG_PROJECT_LAIR_HPP
 #define BIG_PROJECT_LAIR_HPP
+#include "cell.hpp"
+class Lair : public Cell {
+public:
+    Lair(int x, int y) : Cell(x, y) {
+        type = 5;
+    }
 
+    std::vector<Enemy::Enemies*> spawn();
+};
 #endif //BIG_PROJECT_LAIR_HPP

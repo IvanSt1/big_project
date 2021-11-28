@@ -21,6 +21,7 @@ namespace Enemy {
         int aura_hp;
         int aura_reg;
         int aura_speed;
+        std::pair<int,int> coordinate;
     public:
         Enemies() {
             hp = 0;
@@ -33,13 +34,15 @@ namespace Enemy {
             aura_reg = 0;
             aura_speed = 0;
             max_speed=speed;
+            coordinate= std::make_pair(0,0);
         };
 
-        Enemies(int t) {
+        Enemies(int t,std::pair<int,int> p) {
             type = t;
             aura_hp = 0;
             aura_reg = 0;
             aura_speed = 0;
+            coordinate= p;
             if (t == 1) {
                 hp = 100;
                 max_hp = 100;
@@ -95,28 +98,15 @@ namespace Enemy {
             }
 
         };
-
+        void change_coor(std::pair<int,int> p){
+            coordinate=p;
+        }
+        std::pair<int,int> get_coor(){
+            return coordinate;
+        }
     };
 
-    class Hero : public Enemies {
-    private:
-    public:
-        Hero() {
-            aura_speed = 1;
-            aura_reg = 1;
-            aura_hp = 1;
-            type = 4;
-        }
 
-        Hero(int sp, int regen, int health) {
-            aura_hp = health;
-            aura_reg = regen;
-            aura_speed = sp;
-            type = 4;
-        }
-        void give_aura(std::vector<Enemies>);
-
-    };
 }
 
 #endif //BIG_PROJECT_ENEMY_HPP
