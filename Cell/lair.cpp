@@ -1,7 +1,7 @@
 #include <random>
 #include "lair.hpp"
 
-std::vector<Enemy::Enemies*> Lair::spawn() {
+std::vector<Enemy::Enemies*> Lair::spawn(int n) {
     int choice;
     std::vector<Enemy::Enemies*> enemies;
     Enemy::Enemies *new_enemy;
@@ -10,7 +10,7 @@ std::vector<Enemy::Enemies*> Lair::spawn() {
         static std::uniform_int_distribution<int> distr(1, 3);
         return distr(rng);
     };
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < n; i++) {
         new_enemy = new Enemy::Enemies(gen(),get_coordinate() );
         enemies.push_back(new_enemy);
     }

@@ -44,7 +44,9 @@ public:
     bool dist(std::pair<int, int> pair1, std::pair<int, int> pair2) const {
         return ((abs(pair1.first-pair2.first)<=radius)) &&(abs(pair1.second-pair2.second)<radius);
     }
-
+    int get_damage(int) override{
+        return 0;
+    }
     void atack(std::vector<Enemy::Enemies *> enemies)  override {
         int i;
         std::vector<Enemy::Enemies *>::iterator j;
@@ -55,11 +57,12 @@ public:
                 if ((*j)->get_damage(damage)) {
                     j = enemies.erase(j);
 
-                } else {
-                    j++;
                 }
                 i++;
 
+            }
+            else{
+                j++;
             }
         }
 

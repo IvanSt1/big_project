@@ -11,6 +11,6 @@ public:
         type = 5;
     }
 
-    std::vector<Enemy::Enemies*> spawn();
+    std::vector<Enemy::Enemies*> spawn(int n);
 };
 #endif //BIG_PROJECT_LAIR_HPP

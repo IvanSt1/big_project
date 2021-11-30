@@ -64,7 +64,7 @@ public:
         return distance_for_plane;
     }
 
-    int add_defend(Defend::Defender &x);
+    int add_defend(Defend::Defender *x);
 
     bool change_distance(int x) {
         if (distance_from_castle == -1) {
@@ -93,8 +93,6 @@ public:
             }
         }
     }
-
-    void kill(Enemy::Enemies *x);
 };
 
 class Castle : public Cell {

@@ -45,16 +45,19 @@ namespace map1 {
         void draw() ;
         //void draw_enemies();
         void go();
+        void towers_atack();
         Table<int, std::vector<int>> get_table(){
             return Tower_Table;
         };
+
     public:
         Map();
 
         Map(int x1, int y1);
-
+        Map(int x1,int y1, int t);
         void resize(int x1, int y1);
         void play();
+        ~Map()=default;
     };
 }
 #endif //BIG_PROJECT_MAP_HPP

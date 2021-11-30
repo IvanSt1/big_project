@@ -7,13 +7,13 @@ namespace map1 {
 
 
     Map::Map(int x1, int y1) {
-        hp = 100000;
+        hp = 10000000;
         int t;
-        Tower_Table.push(1, {200, 1, 10, 10});
-        Tower_Table.push(2, {200, 2, 15, 15});
-        Tower_Table.push(3, {400, 2, 20, 20});
-        Tower_Table.push(4, {500, 3, 30, 30});
-        Tower_Table.push(5, {600, 3, 40, 40});
+        Tower_Table.insert(1, {200, 1, 10, 10});
+        Tower_Table.insert(2, {200, 2, 15, 15});
+        Tower_Table.insert(3, {400, 2, 20, 20});
+        Tower_Table.insert(4, {500, 3, 30, 30});
+        Tower_Table.insert(5, {600, 3, 40, 40});
         max_x = x1;
         max_y = y1;
         auto gen_x = [this]() {
@@ -180,10 +180,21 @@ namespace map1 {
 
 
     void Map::play() {
-        int x;
+        int x=0,y=0;
+        Tower *tower;
+        wall::Wall* wall;
         while (hp > 0) {
-            add_enemies(L->spawn());
+            add_enemies(L->spawn(2));
             go();
+            if(false){
+                tower=new Tower(Tower_Table, std::make_pair(x,y));
+                towers.push_back(tower);
+            }
+            if(false){
+                wall=new wall::Wall();
+                Cells[x][y].add_defend(wall);
+            }
+            towers_atack();
         }
         if (hp <= 0) {
             std::cout << "ПРОИГРАЛ";
@@ -424,11 +435,11 @@ namespace map1 {
         hp = 0;
         C = nullptr;
         L = nullptr;
-        Tower_Table.push(1, {200, 1, 10, 10});
-        Tower_Table.push(2, {200, 2, 15, 15});
-        Tower_Table.push(3, {400, 2, 20, 20});
-        Tower_Table.push(4, {500, 3, 30, 30});
-        Tower_Table.push(5, {600, 3, 40, 40});
+        Tower_Table.insert(1, {200, 1, 10, 10});
+        Tower_Table.insert(2, {200, 2, 15, 15});
+        Tower_Table.insert(3, {400, 2, 20, 20});
+        Tower_Table.insert(4, {500, 3, 30, 30});
+        Tower_Table.insert(5, {600, 3, 40, 40});
     }
 
     void Map::resize(int x1, int y1) {
@@ -448,5 +459,70 @@ namespace map1 {
         }
     }
 
+    void Map::towers_atack() {
+        for(auto tower:towers){
+            tower->atack(enemies);
+        }
+    }
+
+    Map::Map(int x1, int y1, int t) {
+        hp = 10000000;
+        Tower_Table.insert(1, {200, 1, 10, 10});
+        Tower_Table.insert(2, {200, 2, 15, 15});
+        Tower_Table.insert(3, {400, 2, 20, 20});
+        Tower_Table.insert(4, {500, 3, 30, 30});
+        Tower_Table.insert(5, {600, 3, 40, 40});
+        max_x = x1;
+        max_y = y1;
+        auto gen_x = [this]() {
+            static std::mt19937 rng{std::random_device()()};
+            static std::uniform_int_distribution<int> distr(0, 2);
+            return distr(rng);
+        };
+        auto gen_y = [this]() {
+            static std::mt19937 rng{std::random_device()()};
+            static std::uniform_int_distribution<int> distr(0, 2);
+            return distr(rng);
+        };
+        auto gen_choice = []() {
+            static std::mt19937 rng{std::random_device()()};
+            static std::uniform_int_distribution<int> distr(1, 8);
+            return distr(rng);
+        };
+        Cells.resize(max_x);
+        std::vector<std::vector<Cell>>::iterator i;
+        std::vector<Cell>::iterator j;
+        for (i = Cells.begin(); i != Cells.end(); i++) {
+            i->resize(max_y);
+        }
+        int x, y, choice;
+        x = max_x - 1;
+        y = max_y - 1;
+        Castle castle(x, y);
+        Cells[x][y] = castle;
+        C = static_cast<Castle *>(&Cells[x][y]);
+        x =0;
+        y =0;
+        Lair lair(x, y);
+        Cells[x][y] = lair;
+        L = static_cast<Lair *>(&(Cells[x][y]));
+        do {
+            x = 0;
+            for (i = Cells.begin(); i != Cells.end(); i++) {
+                y = 0;
+                for (j = i->begin(); j != i->end(); j++) {
+                    if (j->get_type() == 0 or j->get_type() == 1 or j->get_type() == 2 or j->get_type() == 3) {
+                        *j = Cell(x, y, t);
+                    }
+                    y++;
+                }
+                x++;
+            }
+            distance();
+        } while (L->get_distance() == -1);
+        distance_for_plane();
+        auto *tower = new Tower(Tower_Table, std::make_pair(3, 4));
+        towers.push_back(tower);
+    }
 }
 

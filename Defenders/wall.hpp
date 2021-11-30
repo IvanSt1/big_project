@@ -29,6 +29,8 @@ namespace wall {
                 return 0;
             }
         }
+        void atack(std::vector<Enemy::Enemies *>) override{}
+        void levelup() override{}
     };
 }
 #endif //BIG_PROJECT_WALL_HPP
