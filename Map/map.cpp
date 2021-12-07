@@ -40,9 +40,9 @@ namespace map1 {
         int x, y, choice;
         x = max_x - 1 - gen_x();
         y = max_y - 1 - gen_y();
-        Castle castle(x, y);
+        Cell castle(x, y,4);
         Cells[x][y] = castle;
-        C = static_cast<Castle *>(&Cells[x][y]);
+        C = &Cells[x][y];
         x = gen_x();
         y = gen_y();
         Lair lair(x, y);
@@ -53,9 +53,8 @@ namespace map1 {
             for (i = Cells.begin(); i != Cells.end(); i++) {
                 y = 0;
                 for (j = i->begin(); j != i->end(); j++) {
-                    choice = gen_choice();
                     if (j->get_type() == 0 or j->get_type() == 1 or j->get_type() == 2 or j->get_type() == 3) {
-                        switch (choice) {
+                        switch ( gen_choice()) {
                             case 1:
                                 t = 1;
                                 break;
@@ -300,6 +299,7 @@ namespace map1 {
 
     int Map::where_to_go(int x, int y) {
         int d, t, dmin = max_y * max_x;
+        t=0;
         if (x - 1 > -1) {
             if ((Cells[x - 1][y].get_type() == 1 or Cells[x - 1][y].get_type() == 4) and
                 Cells[x - 1][y].get_defend() == nullptr) {
@@ -390,7 +390,6 @@ namespace map1 {
         int d, t, dmin = max_y * max_x;
         if (x - 1 > -1) {
             if ((Cells[x - 1][y].get_type() == 1 or Cells[x - 1][y].get_type() == 4)) {
-
                 d = Cells[x - 1][y].get_distance();
                 if (d < dmin) {
                     t = 1;
@@ -474,33 +473,18 @@ namespace map1 {
         Tower_Table.insert(5, {600, 3, 40, 40});
         max_x = x1;
         max_y = y1;
-        auto gen_x = [this]() {
-            static std::mt19937 rng{std::random_device()()};
-            static std::uniform_int_distribution<int> distr(0, 2);
-            return distr(rng);
-        };
-        auto gen_y = [this]() {
-            static std::mt19937 rng{std::random_device()()};
-            static std::uniform_int_distribution<int> distr(0, 2);
-            return distr(rng);
-        };
-        auto gen_choice = []() {
-            static std::mt19937 rng{std::random_device()()};
-            static std::uniform_int_distribution<int> distr(1, 8);
-            return distr(rng);
-        };
         Cells.resize(max_x);
         std::vector<std::vector<Cell>>::iterator i;
         std::vector<Cell>::iterator j;
         for (i = Cells.begin(); i != Cells.end(); i++) {
             i->resize(max_y);
         }
-        int x, y, choice;
+        int x, y;
         x = max_x - 1;
         y = max_y - 1;
-        Castle castle(x, y);
+        Cell castle(x, y,4);
         Cells[x][y] = castle;
-        C = static_cast<Castle *>(&Cells[x][y]);
+        C = &Cells[x][y];
         x =0;
         y =0;
         Lair lair(x, y);
@@ -512,6 +496,7 @@ namespace map1 {
                 y = 0;
                 for (j = i->begin(); j != i->end(); j++) {
                     if (j->get_type() == 0 or j->get_type() == 1 or j->get_type() == 2 or j->get_type() == 3) {
+
                         *j = Cell(x, y, t);
                     }
                     y++;
@@ -523,6 +508,29 @@ namespace map1 {
         distance_for_plane();
         auto *tower = new Tower(Tower_Table, std::make_pair(3, 4));
         towers.push_back(tower);
+    }
+
+    void Map::play(int n, bool t, bool w, int xt, int yt, int xw, int yw) {
+        int i=0;
+        Tower *tower;
+        wall::Wall* wall;
+        while (hp > 0 and i<n) {
+            add_enemies(L->spawn(2));
+            go();
+            if(t){
+                tower=new Tower(Tower_Table, std::make_pair(xt,yt));
+                towers.push_back(tower);
+            }
+            if(w){
+                wall=new wall::Wall();
+                Cells[xw][yw].add_defend(wall);
+            }
+            towers_atack();
+        }
+        if (hp <= 0) {
+            std::cout << "ПРОИГРАЛ";
+        }
+        i++;
     }
 }
 

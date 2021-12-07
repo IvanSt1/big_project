@@ -5,19 +5,94 @@
 #ifndef BIG_PROJECT_TABLE_HPP
 #define BIG_PROJECT_TABLE_HPP
 
+#include <utility>
+#include <stdexcept>
+
 template<typename Key, typename Info>
 class Table {
 private:
     std::pair<Key, Info> *mas;
     int n;
 public:
-    class iterator;
+    class iterator {
+        std::pair<Key, Info> *cur;
+    public:
+        iterator() : cur(0) {};
+
+        iterator(std::pair<Key, Info> *first) : cur(first) {};
+
+        iterator(const iterator &other) : cur(other.cur) {};
+
+        iterator &operator=(iterator other) {
+            cur = other.cur;
+            return *this;
+        }
+
+        iterator &operator++() {
+            ++cur;
+            return *this;
+        }
+
+        iterator &operator++(int) {
+            iterator res(*this);
+            ++(*this);
+            return res;
+        }
+
+        iterator &operator+(int k) {
+            iterator res(cur + k);
+            return res;
+        }
+
+        iterator &operator+=(int k) {
+            cur += k;
+            return *this;
+        }
+
+        iterator &operator--() {
+            --cur;
+            return *this;
+        }
+
+        iterator &operator--(int) {
+            iterator res(*this);
+            --(*this);
+            return res;
+        }
+
+        iterator &operator-(int k) {
+            iterator res(cur + k);
+            return *res;
+        }
+
+        iterator &operator-=(int k) {
+            cur -= k;
+            return this;
+        }
+
+        bool operator!=(const iterator &it) const { return cur != it.cur; }
+
+        bool operator==(const iterator &it) const { return cur == it.cur; }
+
+        std::pair<Key, Info> &operator*() { return (*cur); }
+        std::pair<Key,Info> &operator->(){return cur;}
+
+        bool operator>(const iterator &it) const { return cur > it.cur; }
+
+        bool operator<(const iterator &it) const { return cur < it.cur; }
+
+        bool operator>=(const iterator &it) const { return cur >= it.cur; }
+
+        bool operator<=(const iterator &it) const { return cur <= it.cur; }
+
+
+    }; // ++(int) --(int)  = += -= < > <= >= =
 
     Table();
 
-    iterator begin() { return mas; }
+    iterator begin() { return iterator(mas); }
 
-    iterator end() { return mas + n; }
+    iterator end() { return iterator(mas + n); }
 
     void insert(Key key1, Info info1);
 
@@ -26,26 +101,6 @@ public:
     Info find(Key key1);
 
     ~Table();
-
-    class iterator {
-        std::pair<Key, Info> *cur;
-    public:
-        iterator(std::pair<Key, Info> *first) : cur(first) {};
-
-        std::pair<Key, Info> &operator+(int k) { return *(cur + k); }
-
-        std::pair<Key, Info> &operator-(int k) { return *(cur - k); }
-
-        std::pair<Key, Info> &operator++() { return *cur++; }
-
-        std::pair<Key, Info> &operator--() { return *cur--; }
-
-        bool operator!=(const iterator &it) { return cur != it.cur; }
-
-        bool operator==(const iterator &it) { return cur == it.cur; }
-
-        std::pair<Key, Info> &operator*() { return *cur; }
-    };
 };
 
 template<typename Key, typename Info>
@@ -99,8 +154,7 @@ Info Table<Key, Info>::find(Key key1) {
 }
 
 template<typename Key, typename Info>
-Table<Key, Info>::~Table()=default;
-
+Table<Key, Info>::~Table() = default;
 
 
 #endif //BIG_PROJECT_TABLE_HPP

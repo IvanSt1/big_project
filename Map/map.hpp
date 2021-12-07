@@ -22,7 +22,7 @@ namespace map1 {
         int max_x;
         int max_y;
         std::vector<std::vector<Cell>> Cells;
-        Castle *C;
+        Cell *C;
         int hp;
         int money;
         Lair *L;
@@ -43,7 +43,6 @@ namespace map1 {
             return Cells;
         }
         void draw() ;
-        //void draw_enemies();
         void go();
         void towers_atack();
         Table<int, std::vector<int>> get_table(){
@@ -57,6 +56,7 @@ namespace map1 {
         Map(int x1,int y1, int t);
         void resize(int x1, int y1);
         void play();
+        void play(int n, bool t, bool w, int xt, int yt, int xw, int yw);
         ~Map()=default;
     };
 }

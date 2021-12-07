@@ -8,14 +8,14 @@
 #include <utility>
 #include <vector>
 #include "../Enemys/enemy.hpp"
-#include "../Defenders/defender.hpp"
+#include "../Defenders/wall.hpp"
 
 class Cell {
 protected:
     int type = 0;
     std::pair<int, int> coordinate;
     std::vector<Enemy::Enemies *> en;
-    Defend::Defender *defend;
+    wall::Wall *defend;
     int distance_from_castle;
     int distance_for_plane;
 public:
@@ -33,11 +33,20 @@ public:
         defend = nullptr;
     }
     Cell(int x, int y, int t) {
-        coordinate = std::make_pair(x, y);
-        distance_from_castle = -1;
-        distance_for_plane = -1;
-        defend = nullptr;
-        type=t;
+        if(t==4){
+            coordinate = std::make_pair(x, y);
+            distance_from_castle = 0;
+            distance_for_plane = 0;
+            defend = nullptr;
+            type = t;
+        }
+        else {
+            coordinate = std::make_pair(x, y);
+            distance_from_castle = -1;
+            distance_for_plane = -1;
+            defend = nullptr;
+            type = t;
+        }
     }
 
     [[nodiscard]] std::pair<int, int> get_coordinate() const {
@@ -64,7 +73,9 @@ public:
         return distance_for_plane;
     }
 
-    int add_defend(Defend::Defender *x);
+    int add_defend(wall::Wall *x){
+        defend=x;
+    }
 
     bool change_distance(int x) {
         if (distance_from_castle == -1) {
@@ -95,14 +106,5 @@ public:
     }
 };
 
-class Castle : public Cell {
-private:
-public:
-    Castle(int x, int y) : Cell(x, y) {
-        type = 4;
-        distance_from_castle = 0;
-        distance_for_plane = 0;
-    }
-};
 
 #endif //BIG_PROJECT_CELL_HPP
