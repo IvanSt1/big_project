@@ -1,13 +1,15 @@
 //
 // Created by ivan on 27.11.2021.
 //
-
+/**
+ * @file Entry point
+ * @brief The header file taht presents class Table
+ */
 #ifndef BIG_PROJECT_TABLE_HPP
 #define BIG_PROJECT_TABLE_HPP
 
 #include <utility>
 #include <stdexcept>
-
 template<typename Key, typename Info>
 class Table {
 private:

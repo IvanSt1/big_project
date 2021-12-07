@@ -6,6 +6,5 @@ set(CMAKE_CXX_STANDARD 20)
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
 add_executable(big_project main.cpp Map/map.cpp Enemys/enemy.cpp Enemys/enemy.hpp Map/map.hpp Defenders/defender.hpp Defenders/wall.hpp Defenders/tower.hpp Enemys/hero.cpp Enemys/hero.hpp Cell/cell.hpp Cell/lair.cpp Cell/lair.hpp Table/table.hpp)
-add_executable(table Table/table.hpp Table/test_table.cpp)
 
 target_link_libraries(big_project sfml-graphics sfml-audio)
