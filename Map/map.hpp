@@ -38,14 +38,14 @@ namespace map1 {
         int where_to_go_for_heavy(int x, int y);
 
         int where_to_go_for_plane(int x, int y);
-        Table<int, std::vector<int>> Tower_Table;
+        My_table::Table<int, std::vector<int>> Tower_Table;
         [[nodiscard]] std::vector<std::vector<Cell>> get_map() const {
             return Cells;
         }
         void draw() ;
         void go();
         void towers_atack();
-        Table<int, std::vector<int>> get_table(){
+        My_table::Table<int, std::vector<int>> get_table(){
             return Tower_Table;
         };
 

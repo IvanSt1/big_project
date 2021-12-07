@@ -26,10 +26,10 @@ public:
         coor = std::make_pair(0, 0);
     };
 
-    Tower(Table<int, std::vector<int>> table, std::pair<int, int> p) {
+    Tower(My_table::Table<int, std::vector<int>> table, std::pair<int, int> p) {
         type = 2;
         level = 1;
-        std::vector<int> mas = table.find(1);
+        std::vector<int> mas = (*table.find(1)).second;
         price = mas.at(0);
         radius = mas.at(1);
         damage = mas.at(2);
