@@ -8,7 +8,6 @@
 #include <vector>
 #include <stdexcept>
 #include "../Enemys/enemy.hpp"
-#include "../Table/table.hpp"
 
 namespace Defend {
     class Defender {

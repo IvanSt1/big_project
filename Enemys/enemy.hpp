@@ -47,21 +47,21 @@ namespace Enemy {
                 hp = 100;
                 max_hp = 100;
                 regeneration_speed = 5;
-                speed = 1;
+                speed = 100;
                 k = 1;
             }
             if (t == 2) {
                 hp = 100;
                 max_hp = 100;
                 regeneration_speed = 5;
-                speed = 1;
+                speed = 100;
                 k = 1;
             }
             if (t == 3) {
                 hp = 100;
                 max_hp = 100;
                 regeneration_speed = 5;
-                speed = 1;
+                speed = 100;
                 k = 1;
             }
             max_speed=speed;

@@ -41,136 +41,160 @@ namespace My_table {
              * Default constructor
              */
             iterator() : cur(0) {};
+
+            /*!
+             * Construcotor from pair
+             * @param pair which is pointed by cur
+             */
+            iterator(std::pair<Key, Info> pair) { *cur = pair; };
+
             /*!
              * Construcotor from iterator
              * @param other iterator
              */
             iterator(const iterator &other) : cur(other.cur) {};
+
             /*!
-             *
-             * @param other
+             * = operator overload
+             * @param other iterator
              * @return
              */
             iterator &operator=(iterator other) {
                 cur = other.cur;
                 return *this;
             }
+
             /*!
-             *
-             * @return
+             * prefix ++ operator overload
+             * @return new iterator
              */
             iterator &operator++() {
                 ++cur;
                 return *this;
             }
+
             /*!
-             *
-             * @return
+             * postfix ++ operator overload
+             * @return new iterator
              */
             iterator &operator++(int) {
                 iterator res(*this);
                 ++(*this);
                 return res;
             }
+
             /*!
-             *
+             * + operator overload
              * @param k
-             * @return
+             * @return new iterator
              */
             iterator &operator+(int k) {
                 iterator res(cur + k);
                 return res;
             }
+
             /*!
-             *
+             * += operator overload
              * @param k
-             * @return
+             * @return new iterator
              */
             iterator &operator+=(int k) {
                 cur += k;
                 return *this;
             }
+
             /*!
-             *
-             * @return
+             * prefix -- operator overload
+             * @return new iterator
              */
             iterator &operator--() {
                 --cur;
                 return *this;
             }
+
             /*!
-             *
-             * @return
+             * postfix ++ operator overload
+             * @return new iterator
              */
             iterator &operator--(int) {
                 iterator res(*this);
                 --(*this);
                 return res;
             }
+
             /*!
-             *
+             * - operator overload
              * @param k
-             * @return
+             * @return new iterrator
              */
             iterator &operator-(int k) {
                 iterator res(cur + k);
                 return *res;
             }
+
             /*!
-             *
+             * -= operator overload
              * @param k
-             * @return
+             * @return new iterator
              */
             iterator &operator-=(int k) {
                 cur -= k;
                 return this;
             }
+
             /*!
-             *
-             * @param other
-             * @return
+             *  != operator overload
+             * @param other itertator which one compare
+             * @return bool
              */
             bool operator!=(const iterator &other) const { return cur != other.cur; }
+
             /*!
-             *
-             * @param other
-             * @return
+             *  == operator overload
+             * @param other itertator which one compare
+             * @return bool
              */
             bool operator==(const iterator &other) const { return cur == other.cur; }
+
             /*!
-             *
-             * @return
+             * * operator overload
+             * @return pointer to a pair
              */
             std::pair<Key, Info> &operator*() { return (*cur); }
+
             /*!
-             *
-             * @return
+             * -> operator overload
+             * @return pair
              */
             std::pair<Key, Info> &operator->() { return cur; }
+
             /*!
-             *
-             * @param it
-             * @return
+             *  > operator overload
+             * @param other itertator which one compare
+             * @return bool
              */
-            bool operator>(const iterator &it) const { return cur > it.cur; }
+            bool operator>(const iterator &other) const { return cur > other.cur; }
+
             /*!
-             *
-             * @param it
-             * @return
+             *  < operator overload
+             * @param other itertator which one compare
+             * @return bool
              */
-            bool operator<(const iterator &it) const { return cur < it.cur; }
+            bool operator<(const iterator &other) const { return cur < other.cur; }
+
             /*!
-             *
-             * @param it
-             * @return
+             *  >= operator overload
+             * @param other itertator which one compare
+             * @return bool
              */
-            bool operator>=(const iterator &it) const { return cur >= it.cur; }
+            bool operator>=(const iterator &other) const { return cur >= other.cur; }
+
             /*!
-             *
-             * @param it
-             * @return
+             *  <= operator overload
+             * @param other itertator which one compare
+             * @return bool
              */
-            bool operator<=(const iterator &it) const { return cur <= it.cur; }
+            bool operator<=(const iterator &other) const { return cur <= other.cur; }
         };
 
         /*!
@@ -185,13 +209,13 @@ namespace My_table {
          * find first element
          * @return iterator pointing to the first element
          */
-        iterator begin() { return iterator(mas); }
+        iterator begin() { return iterator(*mas); }
 
         /*!
          * end of mas
          * @return iterator pointing to the end of mas
          */
-        iterator end() { return iterator(mas + n); }
+        iterator end() { return iterator(*(mas + n)); }
 
         /*!
          * Add new element to the end

@@ -39,9 +39,6 @@ namespace map1 {
 
         int where_to_go_for_plane(int x, int y);
         My_table::Table<int, std::vector<int>> Tower_Table;
-        [[nodiscard]] std::vector<std::vector<Cell>> get_map() const {
-            return Cells;
-        }
         void draw() ;
         void go();
         void towers_atack();
@@ -51,7 +48,12 @@ namespace map1 {
 
     public:
         Map();
-
+        std::vector<std::vector<Cell>> get_map() const {
+            return Cells;
+        }
+        int get_max_x() const {return max_x;};
+        int get_max_y() const {return max_x;};
+        std::vector<Enemy::Enemies*> get_enemies() const{return enemies;};
         Map(int x1, int y1);
         Map(int x1,int y1, int t);
         void resize(int x1, int y1);

@@ -6,7 +6,7 @@
 #define BIG_PROJECT_TOWER_HPP
 
 #include "defender.hpp"
-
+#include "../Table/table.hpp"
 class Tower : public Defend::Defender {
 private:
     int level;
