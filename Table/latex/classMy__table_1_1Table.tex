@@ -1,0 +1,141 @@
+\hypertarget{classMy__table_1_1Table}{}\doxysection{My\+\_\+table\+::Table$<$ Key, Info $>$ Class Template Reference}
+\label{classMy__table_1_1Table}\index{My\_table::Table$<$ Key, Info $>$@{My\_table::Table$<$ Key, Info $>$}}
+
+
+Class \mbox{\hyperlink{classMy__table_1_1Table}{Table}}.  
+
+
+
+
+{\ttfamily \#include $<$table.\+hpp$>$}
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classMy__table_1_1Table_1_1iterator}{iterator}}
+\begin{DoxyCompactList}\small\item\em Class Iterator. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classMy__table_1_1Table_a2a5e344a34a47486c6b6eeafca3e5237}{Table}} ()
+\item 
+\mbox{\hyperlink{classMy__table_1_1Table_1_1iterator}{iterator}} \mbox{\hyperlink{classMy__table_1_1Table_a0fa5a05aeaa4d59643ccddbda8acf2a1}{begin}} ()
+\item 
+\mbox{\hyperlink{classMy__table_1_1Table_1_1iterator}{iterator}} \mbox{\hyperlink{classMy__table_1_1Table_ae33e04b2519d27a44d1c5546ad376d17}{end}} ()
+\item 
+void \mbox{\hyperlink{classMy__table_1_1Table_a5e74b36a56c5085ffbdfcb456c41a3f1}{insert}} (Key key1, Info info1)
+\item 
+void \mbox{\hyperlink{classMy__table_1_1Table_a313ac9d3c5e931cac98b7ad690f99ccf}{insert}} (std\+::pair$<$ Key, Info $>$ pair)
+\item 
+\mbox{\hyperlink{classMy__table_1_1Table_1_1iterator}{iterator}} \mbox{\hyperlink{classMy__table_1_1Table_abf6d5fa0e6080d653afec4767232b30a}{find}} (Key key1)
+\item 
+\mbox{\hyperlink{classMy__table_1_1Table_a31b2e5b1b0beb7951d82e4c32a796a8d}{$\sim$\+Table}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename Key, typename Info$>$\newline
+class My\+\_\+table\+::\+Table$<$ Key, Info $>$}
+
+Class \mbox{\hyperlink{classMy__table_1_1Table}{Table}}. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Key} & Any type of data that is a key \\
+\hline
+{\em Info} & Any type of data that is an info \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em mas} & An Array consisting of n number of elements pair $<$Key, Info$>$ \\
+\hline
+{\em n} & Number of elements \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMy__table_1_1Table_a2a5e344a34a47486c6b6eeafca3e5237}\label{classMy__table_1_1Table_a2a5e344a34a47486c6b6eeafca3e5237}} 
+\index{My\_table::Table$<$ Key, Info $>$@{My\_table::Table$<$ Key, Info $>$}!Table@{Table}}
+\index{Table@{Table}!My\_table::Table$<$ Key, Info $>$@{My\_table::Table$<$ Key, Info $>$}}
+\doxysubsubsection{\texorpdfstring{Table()}{Table()}}
+{\footnotesize\ttfamily template$<$typename Key , typename Info $>$ \\
+\mbox{\hyperlink{classMy__table_1_1Table}{My\+\_\+table\+::\+Table}}$<$ Key, Info $>$\+::\mbox{\hyperlink{classMy__table_1_1Table}{Table}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Default constructor \mbox{\Hypertarget{classMy__table_1_1Table_a31b2e5b1b0beb7951d82e4c32a796a8d}\label{classMy__table_1_1Table_a31b2e5b1b0beb7951d82e4c32a796a8d}} 
+\index{My\_table::Table$<$ Key, Info $>$@{My\_table::Table$<$ Key, Info $>$}!````~Table@{$\sim$Table}}
+\index{````~Table@{$\sim$Table}!My\_table::Table$<$ Key, Info $>$@{My\_table::Table$<$ Key, Info $>$}}
+\doxysubsubsection{\texorpdfstring{$\sim$Table()}{~Table()}}
+{\footnotesize\ttfamily template$<$typename Key , typename Info $>$ \\
+\mbox{\hyperlink{classMy__table_1_1Table}{My\+\_\+table\+::\+Table}}$<$ Key, Info $>$\+::$\sim$\mbox{\hyperlink{classMy__table_1_1Table}{Table}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+Default destructor 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMy__table_1_1Table_a0fa5a05aeaa4d59643ccddbda8acf2a1}\label{classMy__table_1_1Table_a0fa5a05aeaa4d59643ccddbda8acf2a1}} 
+\index{My\_table::Table$<$ Key, Info $>$@{My\_table::Table$<$ Key, Info $>$}!begin@{begin}}
+\index{begin@{begin}!My\_table::Table$<$ Key, Info $>$@{My\_table::Table$<$ Key, Info $>$}}
+\doxysubsubsection{\texorpdfstring{begin()}{begin()}}
+{\footnotesize\ttfamily template$<$typename Key , typename Info $>$ \\
+\mbox{\hyperlink{classMy__table_1_1Table_1_1iterator}{iterator}} \mbox{\hyperlink{classMy__table_1_1Table}{My\+\_\+table\+::\+Table}}$<$ Key, Info $>$\+::begin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+find first element \begin{DoxyReturn}{Returns}
+iterator pointing to the first element 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classMy__table_1_1Table_ae33e04b2519d27a44d1c5546ad376d17}\label{classMy__table_1_1Table_ae33e04b2519d27a44d1c5546ad376d17}} 
+\index{My\_table::Table$<$ Key, Info $>$@{My\_table::Table$<$ Key, Info $>$}!end@{end}}
+\index{end@{end}!My\_table::Table$<$ Key, Info $>$@{My\_table::Table$<$ Key, Info $>$}}
+\doxysubsubsection{\texorpdfstring{end()}{end()}}
+{\footnotesize\ttfamily template$<$typename Key , typename Info $>$ \\
+\mbox{\hyperlink{classMy__table_1_1Table_1_1iterator}{iterator}} \mbox{\hyperlink{classMy__table_1_1Table}{My\+\_\+table\+::\+Table}}$<$ Key, Info $>$\+::end (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+end of mas \begin{DoxyReturn}{Returns}
+iterator pointing to the end of mas 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classMy__table_1_1Table_abf6d5fa0e6080d653afec4767232b30a}\label{classMy__table_1_1Table_abf6d5fa0e6080d653afec4767232b30a}} 
+\index{My\_table::Table$<$ Key, Info $>$@{My\_table::Table$<$ Key, Info $>$}!find@{find}}
+\index{find@{find}!My\_table::Table$<$ Key, Info $>$@{My\_table::Table$<$ Key, Info $>$}}
+\doxysubsubsection{\texorpdfstring{find()}{find()}}
+{\footnotesize\ttfamily template$<$typename Key , typename Info $>$ \\
+\mbox{\hyperlink{classMy__table_1_1Table_1_1iterator}{iterator}} \mbox{\hyperlink{classMy__table_1_1Table}{My\+\_\+table\+::\+Table}}$<$ Key, Info $>$\+::find (\begin{DoxyParamCaption}\item[{Key}]{key1 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+find element by key 
+\begin{DoxyParams}{Parameters}
+{\em key1} & key that you want to find \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+iterator pointing to the desired element if there is no such key returns end 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classMy__table_1_1Table_a5e74b36a56c5085ffbdfcb456c41a3f1}\label{classMy__table_1_1Table_a5e74b36a56c5085ffbdfcb456c41a3f1}} 
+\index{My\_table::Table$<$ Key, Info $>$@{My\_table::Table$<$ Key, Info $>$}!insert@{insert}}
+\index{insert@{insert}!My\_table::Table$<$ Key, Info $>$@{My\_table::Table$<$ Key, Info $>$}}
+\doxysubsubsection{\texorpdfstring{insert()}{insert()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename Key , typename Info $>$ \\
+void \mbox{\hyperlink{classMy__table_1_1Table}{My\+\_\+table\+::\+Table}}$<$ Key, Info $>$\+::insert (\begin{DoxyParamCaption}\item[{Key}]{key1,  }\item[{Info}]{info1 }\end{DoxyParamCaption})}
+
+Add new element to the end 
+\begin{DoxyParams}{Parameters}
+{\em key1} & Key \\
+\hline
+{\em info1} & Info \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classMy__table_1_1Table_a313ac9d3c5e931cac98b7ad690f99ccf}\label{classMy__table_1_1Table_a313ac9d3c5e931cac98b7ad690f99ccf}} 
+\index{My\_table::Table$<$ Key, Info $>$@{My\_table::Table$<$ Key, Info $>$}!insert@{insert}}
+\index{insert@{insert}!My\_table::Table$<$ Key, Info $>$@{My\_table::Table$<$ Key, Info $>$}}
+\doxysubsubsection{\texorpdfstring{insert()}{insert()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename Key , typename Info $>$ \\
+void \mbox{\hyperlink{classMy__table_1_1Table}{My\+\_\+table\+::\+Table}}$<$ Key, Info $>$\+::insert (\begin{DoxyParamCaption}\item[{std\+::pair$<$ Key, Info $>$}]{pair }\end{DoxyParamCaption})}
+
+Add new element to the end 
+\begin{DoxyParams}{Parameters}
+{\em pair} & Pair consists of Key and Info \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+table.\+hpp\end{DoxyCompactItemize}
