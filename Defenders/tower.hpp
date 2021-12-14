@@ -47,7 +47,7 @@ public:
     int get_damage(int) override{
         return 0;
     }
-    void atack(std::vector<Enemy::Enemies *> enemies)  override {
+    void atack(std::vector<Enemy::Enemies *> enemies, int &money)  override {
         int i;
         std::vector<Enemy::Enemies *>::iterator j;
         j = enemies.begin();
@@ -56,7 +56,7 @@ public:
             if (dist(coor, (*j)->get_coor())) {
                 if ((*j)->get_damage(damage)) {
                     j = enemies.erase(j);
-
+                    money+=10;
                 }
                 i++;
 

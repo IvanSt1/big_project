@@ -12,7 +12,6 @@
 #include "../Defenders/wall.hpp"
 #include "../Cell/cell.hpp"
 #include "../Cell/lair.hpp"
-#include <SFML/Graphics.hpp>
 #include <random>
 #include <iostream>
 
@@ -28,7 +27,6 @@ namespace map1 {
         Lair *L;
         std::vector<Enemy::Enemies*> enemies;
         std::vector<Tower*> towers;
-        sf::RenderWindow window;
         void distance();
         void add_enemies(std::vector<Enemy::Enemies*>);
         void distance_for_plane();
@@ -59,7 +57,8 @@ namespace map1 {
         void resize(int x1, int y1);
         void play();
         void play(int n, bool t, bool w, int xt, int yt, int xw, int yw);
-        ~Map()=default;
+        ~Map();
+        int get_hp() const {return hp;};
     };
 }
 #endif //BIG_PROJECT_MAP_HPP

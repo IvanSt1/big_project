@@ -166,7 +166,7 @@ namespace My_table {
              * -> operator overload
              * @return pair
              */
-            std::pair<Key, Info> &operator->() { return cur; }
+            std::pair<Key, Info> *operator->() { return cur; }
 
             /*!
              *  > operator overload

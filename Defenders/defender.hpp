@@ -20,7 +20,7 @@ namespace Defend {
             return type;
         }
 
-        virtual void atack(std::vector<Enemy::Enemies*>) = 0;
+        virtual void atack(std::vector<Enemy::Enemies*>, int &) = 0;
 
         virtual void levelup() = 0;
     };

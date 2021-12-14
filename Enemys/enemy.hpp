@@ -54,14 +54,14 @@ namespace Enemy {
                 hp = 100;
                 max_hp = 100;
                 regeneration_speed = 5;
-                speed = 100;
+                speed = 150;
                 k = 1;
             }
             if (t == 3) {
                 hp = 100;
                 max_hp = 100;
                 regeneration_speed = 5;
-                speed = 100;
+                speed = 75;
                 k = 1;
             }
             max_speed=speed;
@@ -103,6 +103,9 @@ namespace Enemy {
         }
         std::pair<int,int> get_coor(){
             return coordinate;
+        }
+        int get_speed(){
+            return speed;
         }
     };
 

@@ -29,7 +29,7 @@ namespace wall {
                 return 0;
             }
         }
-        void atack(std::vector<Enemy::Enemies *>) override{}
+        void atack(std::vector<Enemy::Enemies *>, int &) override{};
         void levelup() override{}
     };
 }

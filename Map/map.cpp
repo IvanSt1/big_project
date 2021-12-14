@@ -7,7 +7,7 @@ namespace map1 {
 
 
     Map::Map(int x1, int y1) {
-        hp = 10000000;
+        hp = 1000;
         int t;
         Tower_Table.insert(1, {200, 1, 10, 10});
         Tower_Table.insert(2, {200, 2, 15, 15});
@@ -40,7 +40,7 @@ namespace map1 {
         int x, y, choice;
         x = max_x - 1 - gen_x();
         y = max_y - 1 - gen_y();
-        Cell castle(x, y,4);
+        Cell castle(x, y, 4);
         Cells[x][y] = castle;
         C = &Cells[x][y];
         x = gen_x();
@@ -54,7 +54,7 @@ namespace map1 {
                 y = 0;
                 for (j = i->begin(); j != i->end(); j++) {
                     if (j->get_type() == 0 or j->get_type() == 1 or j->get_type() == 2 or j->get_type() == 3) {
-                        switch ( gen_choice()) {
+                        switch (gen_choice()) {
                             case 1:
                                 t = 1;
                                 break;
@@ -132,65 +132,19 @@ namespace map1 {
         };
     }
 
-    void Map::draw() {
-        int t;
-        std::vector<Cell>::iterator way, next;
-        sf::Sprite sprite;
-        sf::Image plain_image, water_image, mountain_image, castle_image, lair_image, light_image, heavy_image, plane_image;
-        plain_image.loadFromFile("../Map/Image/plain.png");
-        water_image.loadFromFile("../Map/Image/water.png");
-        mountain_image.loadFromFile("../Map/Image/mountain.png");
-        castle_image.loadFromFile("../Map/Image/castle.png");
-        lair_image.loadFromFile("../Map/Image/lair.png");
-        sf::Texture plain_texture, water_texture, mountain_texture, castle_texture, lair_texture, light_texture, heavy_texture, plane_texture;
-        plain_texture.loadFromImage(plain_image);
-        water_texture.loadFromImage(water_image);
-        mountain_texture.loadFromImage(mountain_image);
-        castle_texture.loadFromImage(castle_image);
-        lair_texture.loadFromImage(lair_image);
-        for (int i = 0; i < max_y; i++) {
-            for (int j = 0; j < max_x; j++) {
-                t = get_map()[j][i].get_type();
-                switch (t) {
-                    case 0:
-                        break;
-                    case 1:
-                        sprite.setTexture(plain_texture);
-                        break;
-                    case 2:
-                        sprite.setTexture(mountain_texture);
-                        break;
-                    case 3:
-                        sprite.setTexture(water_texture);
-                        break;
-                    case 4:
-                        sprite.setTexture(castle_texture);
-                        break;
-                    case 5:
-                        sprite.setTexture(lair_texture);
-                        break;
-                }
-                sprite.setPosition(j * 64, i * 64);
-                window.draw(sprite);
-            }
-        }
-
-    }
-
-
     void Map::play() {
-        int x=0,y=0;
+        int x = 0, y = 0;
         Tower *tower;
-        wall::Wall* wall;
+        wall::Wall *wall;
         while (hp > 0) {
             add_enemies(L->spawn(2));
             go();
-            if(false){
-                tower=new Tower(Tower_Table, std::make_pair(x,y));
+            if (false) {
+                tower = new Tower(Tower_Table, std::make_pair(x, y));
                 towers.push_back(tower);
             }
-            if(false){
-                wall=new wall::Wall();
+            if (false) {
+                wall = new wall::Wall();
                 Cells[x][y].add_defend(wall);
             }
             towers_atack();
@@ -299,7 +253,7 @@ namespace map1 {
 
     int Map::where_to_go(int x, int y) {
         int d, t, dmin = max_y * max_x;
-        t=0;
+        t = 0;
         if (x - 1 > -1) {
             if ((Cells[x - 1][y].get_type() == 1 or Cells[x - 1][y].get_type() == 4) and
                 Cells[x - 1][y].get_defend() == nullptr) {
@@ -459,13 +413,13 @@ namespace map1 {
     }
 
     void Map::towers_atack() {
-        for(auto tower:towers){
-            tower->atack(enemies);
+        for (auto tower: towers) {
+            tower->atack(enemies, money);
         }
     }
 
     Map::Map(int x1, int y1, int t) {
-        hp = 10000000;
+        hp = 1000000000;
         Tower_Table.insert(1, {200, 1, 10, 10});
         Tower_Table.insert(2, {200, 2, 15, 15});
         Tower_Table.insert(3, {400, 2, 20, 20});
@@ -482,11 +436,11 @@ namespace map1 {
         int x, y;
         x = max_x - 1;
         y = max_y - 1;
-        Cell castle(x, y,4);
+        Cell castle(x, y, 4);
         Cells[x][y] = castle;
         C = &Cells[x][y];
-        x =0;
-        y =0;
+        x = 0;
+        y = 0;
         Lair lair(x, y);
         Cells[x][y] = lair;
         L = static_cast<Lair *>(&(Cells[x][y]));
@@ -511,26 +465,39 @@ namespace map1 {
     }
 
     void Map::play(int n, bool t, bool w, int xt, int yt, int xw, int yw) {
-        int i=0;
+        int i = 0;
         Tower *tower;
-        wall::Wall* wall;
-        while (hp > 0 and i<n) {
-            add_enemies(L->spawn(2));
+        wall::Wall *wall;
+        while (hp > 0 and i < n) {
+            add_enemies(L->spawn(1));
             go();
-            if(t){
-                tower=new Tower(Tower_Table, std::make_pair(xt,yt));
-                towers.push_back(tower);
+            if (t) {
+                if (money>(Tower_Table.find(1)->second[0])) {
+                    tower = new Tower(Tower_Table, std::make_pair(xt, yt));
+                    towers.push_back(tower);
+                    money-=(Tower_Table.find(1)->second[0]);
+                }
             }
-            if(w){
-                wall=new wall::Wall();
-                Cells[xw][yw].add_defend(wall);
+            if (w) {
+                if (money>150) {
+                    wall = new wall::Wall();
+                    Cells[xw][yw].add_defend(wall);
+                    money-=150;
+                }
             }
             towers_atack();
+            i++;
         }
         if (hp <= 0) {
             std::cout << "ПРОИГРАЛ";
         }
-        i++;
+    }
+
+    Map::~Map() {
+        for (auto i: enemies) {
+            delete i;
+        }
+
     }
 }
 
