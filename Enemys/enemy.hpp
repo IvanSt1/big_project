@@ -18,9 +18,6 @@ namespace Enemy {
         int max_speed;
         int k;
         int type;
-        int aura_hp;
-        int aura_reg;
-        int aura_speed;
         std::pair<int,int> coordinate;
     public:
         Enemies() {
@@ -30,18 +27,12 @@ namespace Enemy {
             speed = 0;
             k = 0;
             type = 0;
-            aura_hp = 0;
-            aura_reg = 0;
-            aura_speed = 0;
             max_speed=speed;
             coordinate= std::make_pair(0,0);
         };
 
         Enemies(int t,std::pair<int,int> p) {
             type = t;
-            aura_hp = 0;
-            aura_reg = 0;
-            aura_speed = 0;
             coordinate= p;
             if (t == 1) {
                 hp = 100;
@@ -82,14 +73,10 @@ namespace Enemy {
 
         int get_damage(int d);
 
-        int regeneration();
-
-        int get_aura(int sp, int regen, int h);
-
-        int lost_aura();
+        void regeneration();
 
         bool moving() {
-            speed -= (1 + aura_speed);
+            speed -= 1;
             if (speed == 0) {
                 speed = max_speed;
                 return true;

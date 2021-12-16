@@ -56,9 +56,10 @@ namespace map1 {
         Map(int x1,int y1, int t);
         void resize(int x1, int y1);
         void play();
-        void play(int n, bool t, bool w, int xt, int yt, int xw, int yw);
+        void play(int n, bool t, bool w, int x, int y);
         ~Map();
         int get_hp() const {return hp;};
+        std::vector<Tower*> get_towers() const {return towers;};
     };
 }
 #endif //BIG_PROJECT_MAP_HPP

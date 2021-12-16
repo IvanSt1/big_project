@@ -16,7 +16,7 @@ namespace wall {
     public:
         Wall() {
             type = 1;
-            max_hp = 500;
+            max_hp = 400;
             hp = max_hp;
         }
 

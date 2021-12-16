@@ -68,6 +68,9 @@ public:
 
 
     }
+    std::pair<int, int> get_coor() const{
+        return coor;
+    }
 
 };
 

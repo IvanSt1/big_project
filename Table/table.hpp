@@ -46,7 +46,7 @@ namespace My_table {
              * Construcotor from pair
              * @param pair which is pointed by cur
              */
-            iterator(std::pair<Key, Info> pair) { *cur = pair; };
+            iterator(std::pair<Key, Info> *p):  cur(p) {};
 
             /*!
              * Construcotor from iterator
@@ -209,13 +209,13 @@ namespace My_table {
          * find first element
          * @return iterator pointing to the first element
          */
-        iterator begin() { return iterator(*mas); }
+        iterator begin() { return iterator(mas); }
 
         /*!
          * end of mas
          * @return iterator pointing to the end of mas
          */
-        iterator end() { return iterator(*(mas + n)); }
+        iterator end() { return iterator((mas + n)); }
 
         /*!
          * Add new element to the end
@@ -238,6 +238,7 @@ namespace My_table {
          */
         iterator find(Key key1) {
             iterator x;
+            x=this->begin();
             for (x = this->begin(); x != this->end(); ++x) {
                 if ((*x).first == key1) {
                     break;
@@ -249,7 +250,9 @@ namespace My_table {
         /*!
          * Default destructor
          */
-        ~Table();
+        ~Table(){
+            delete [] mas;
+        };
     };
 
 
@@ -281,9 +284,6 @@ namespace My_table {
         n++;
     }
 
-
-    template<typename Key, typename Info>
-    Table<Key, Info>::~Table() = default;
 }
 
 #endif //BIG_PROJECT_TABLE_HPP

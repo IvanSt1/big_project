@@ -1,18 +1,20 @@
 #include <iostream>
+#include <vector>
 #include "table.hpp"
 int main(){
-    My_table::Table<int, int> t;
-    t.insert(1, 1);
-    t.insert(2, 3);
-    t.insert(3, 4);
-    t.insert(4, 5);
-    t.insert(5, 6);
-    auto x=t.find(5);
+    My_table::Table<int, std::vector<int>> t;
+    t.insert(1, {200, 1, 10, 10});
+    t.insert(2, {200, 2, 15, 15});
+    t.insert(3, {400, 2, 20, 20});
+    t.insert(4, {500, 3, 30, 30});
+    t.insert(5, {600, 3, 40, 40});
+    My_table::Table<int,std::vector<int>>::iterator x;
+    x=t.find(1);
     if(x==t.end()){
         std::cout<<" ничего";
     }
     else {
-        std::cout << (*x).first << (*x).second;
+        std::cout << (*x).first << (*x).second[0];
     }
     return 0;
 }

@@ -104,6 +104,10 @@ public:
             }
         }
     }
+    void delete_defend(){
+        delete defend;
+        defend= nullptr;
+    }
 };
 
 
