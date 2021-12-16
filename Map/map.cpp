@@ -8,7 +8,7 @@ namespace map1 {
 
     Map::Map(int x1, int y1) {
         hp = 1000;
-        money=1000;
+        money = 1000;
         int t;
         Tower_Table.insert(1, {200, 1, 10, 10});
         Tower_Table.insert(2, {200, 2, 15, 15});
@@ -211,7 +211,7 @@ namespace map1 {
                 hp -= (*e)->get_hp() * (*e)->get_k();
                 e = enemies.erase(e);
             } else if (Cells[x][y].get_defend() != nullptr and Cells[x][y].get_defend()->get_type() == 1) {
-                if(Cells[x][y].get_defend()->get_damage((*e)->get_hp() * (*e)->get_k())==0){
+                if (Cells[x][y].get_defend()->get_damage((*e)->get_hp() * (*e)->get_k()) == 0) {
                     Cells[x][y].delete_defend();
                 };
                 e = enemies.erase(e);
@@ -418,17 +418,17 @@ namespace map1 {
 
     void Map::towers_atack() {
         for (auto tower: towers) {
-            tower->atack(enemies, money);
+            (*tower).atack(enemies, money);
         }
     }
 
     Map::Map(int x1, int y1, int t) {
         hp = 1000000000;
-        Tower_Table.insert(1, {200, 2, 10, 10});
-        Tower_Table.insert(2, {200, 2, 15, 15});
-        Tower_Table.insert(3, {400, 3, 20, 20});
-        Tower_Table.insert(4, {500, 3, 30, 30});
-        Tower_Table.insert(5, {600, 4, 40, 40});
+        Tower_Table.insert(1, {200, 2, 10, 5});
+        Tower_Table.insert(2, {200, 2, 15, 5});
+        Tower_Table.insert(3, {400, 3, 20, 5});
+        Tower_Table.insert(4, {500, 3, 30, 5});
+        Tower_Table.insert(5, {600, 4, 40, 5});
         max_x = x1;
         max_y = y1;
         Cells.resize(max_x);
@@ -478,25 +478,29 @@ namespace map1 {
         };
         wall::Wall *wall;
         while (hp > 0 and i < n) {
-            int k=gen();
+            int k = gen();
             if (k == 5) {
                 add_enemies(L->spawn(1));
             }
             go();
-            if (t) {
-                int price=Tower_Table.find(1)->second[0];
+            if (t and (Cells[x][y].get_type() == 1)) {
+
+                int price = Tower_Table.find(1)->second[0];
                 if (money > price) {
                     tower = new Tower(Tower_Table, std::make_pair(x, y));
                     towers.push_back(tower);
                     money -= price;
                 }
+
             }
-            if (w) {
+            if (w and (Cells[x][y].get_type() == 1)) {
+
                 if (money > 150) {
                     wall = new wall::Wall();
                     Cells[x][y].add_defend(wall);
                     money -= 150;
                 }
+
             }
             towers_atack();
             i++;

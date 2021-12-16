@@ -106,7 +106,7 @@ int main() {
                     case 4:
                         break;
                 }
-                enemy_sprite.setPosition(i->get_coor().first * 64 + 16, i->get_coor().second * 64 + 16);
+                enemy_sprite.setPosition(i->get_coor().first * 64 + 8, i->get_coor().second * 64 + 8);
                 window.draw(enemy_sprite);
             }
 

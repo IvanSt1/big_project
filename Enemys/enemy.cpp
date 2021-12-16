@@ -4,10 +4,10 @@
 namespace Enemy {
     int Enemies::get_damage(int d) {
         hp -= d;
-        if (hp < 0) {
-            return 0;
-        } else {
+        if (hp >0 ) {
             return 1;
+        } else {
+            return 0;
         }
     }
     void Enemies::regeneration() {

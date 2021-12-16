@@ -236,7 +236,7 @@ namespace My_table {
          * @param key1 key that you want to find
          * @return iterator pointing to the desired element if there is no such key returns end
          */
-        iterator find(Key key1) {
+        iterator find(Key key1)  {
             iterator x;
             x=this->begin();
             for (x = this->begin(); x != this->end(); ++x) {
