@@ -7,13 +7,21 @@ int main() {
     y = 15;
     bool add_tower=false, add_wall= false;
     int x1,y1,x2,y2;
-    sf::RenderWindow window(sf::VideoMode(x * 64, y * 64), "Tower_defence");
+    sf::RenderWindow window(sf::VideoMode(x * 64+100, y * 64), "Tower_defence");
 
     sf::Font font;//шрифт
     font.loadFromFile("../Map/Image/CyrilicOld.TTF");
     sf::Text text_tower("TOWER", font, 50);
     text_tower.setStyle(sf::Text::Bold);
     sf::Text text_wall("WALL", font, 50);
+    text_wall.setStyle(sf::Text::Bold);
+    sf::Text text_hp("HP", font, 30);
+    text_tower.setStyle(sf::Text::Bold);
+    sf::Text text_money("Money", font, 30);
+    text_wall.setStyle(sf::Text::Bold);
+    sf::Text hp("", font, 30);
+    text_tower.setStyle(sf::Text::Bold);
+    sf::Text money("", font, 30);
     text_wall.setStyle(sf::Text::Bold);
 
     sf::Sprite sprite, enemy_sprite, potracheno, wall_sprite, tower_sprite;
@@ -115,7 +123,19 @@ int main() {
                 tower_sprite.setPosition(i->get_coor().first * 64 + 16, i->get_coor().second * 64 + 16);
                 window.draw(tower_sprite);
             }
+            text_hp.setFillColor(sf::Color::Red);
+            text_hp.setPosition(64*x+1,50);
+            text_money.setFillColor(sf::Color::Red);
+            text_money.setPosition(64*x+1,200);
+            hp.setString(std::to_string(karta.get_hp()));
+            money.setString(std::to_string(karta.get_money()));
 
+            hp.setPosition(64*x+1, 100);
+            money.setPosition(64*x+1, 300);
+            window.draw(hp);
+            window.draw(money);
+            window.draw(text_hp);
+            window.draw(text_money);
             window.display();
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
                 x1 =sf::Mouse::getPosition(window).x;
@@ -127,7 +147,6 @@ int main() {
                         if (event1.type == sf::Event::Closed)
                             window1.close();
                     }
-
                     text_tower.setPosition(100 ,100);
                     text_wall.setPosition(100,300);
                     rectangle.setFillColor(sf::Color::Red);
@@ -138,6 +157,10 @@ int main() {
                     window1.draw(text_tower);
                     window1.draw(text_wall);
                     window1.display();
+                    int z=0;
+                    while(z<200){
+                        z++;
+                    }
                     if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
                         x2 =sf::Mouse::getPosition(window1).x;
                         y2= sf::Mouse::getPosition(window1).y;
@@ -147,10 +170,15 @@ int main() {
                     }
                 }
             }
+
+
             karta.play(1, add_tower, add_wall, int(x1/64), int(y1/64));
             add_tower=false;
             add_wall= false;
         }
+
+
+
         else{
             window.clear();
             window.draw(potracheno);

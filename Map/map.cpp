@@ -473,7 +473,7 @@ namespace map1 {
         Tower *tower;
         auto gen = []() {
             static std::mt19937 rng{std::random_device()()};
-            static std::uniform_int_distribution<int> distr(0, 100);
+            static std::uniform_int_distribution<int> distr(0, 30);
             return distr(rng);
         };
         wall::Wall *wall;
@@ -482,6 +482,7 @@ namespace map1 {
             if (k == 5) {
                 add_enemies(L->spawn(1));
             }
+
             go();
             if (t and (Cells[x][y].get_type() == 1)) {
 

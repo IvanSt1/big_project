@@ -59,6 +59,7 @@ namespace map1 {
         void play(int n, bool t, bool w, int x, int y);
         ~Map();
         int get_hp() const {return hp;};
+        int get_money() const {return money;};
         std::vector<Tower*> get_towers() const {return towers;};
     };
 }

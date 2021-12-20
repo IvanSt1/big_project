@@ -7,7 +7,7 @@ std::vector<Enemy::Enemies*> Lair::spawn(int n) {
     Enemy::Enemies *new_enemy;
     auto gen = []() {
         static std::mt19937 rng{std::random_device()()};
-        static std::uniform_int_distribution<int> distr(1, 2);
+        static std::uniform_int_distribution<int> distr(1, 3);
         return distr(rng);
     };
     for (int i = 0; i < n; i++) {

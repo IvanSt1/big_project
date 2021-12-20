@@ -233,19 +233,24 @@ namespace My_table {
 
         /*!
          * find element by key
-         * @param key1 key that you want to find
+         * @param key key that you want to find
          * @return iterator pointing to the desired element if there is no such key returns end
          */
-        iterator find(Key key1)  {
+        iterator find(Key key)  {
             iterator x;
             x=this->begin();
             for (x = this->begin(); x != this->end(); ++x) {
-                if ((*x).first == key1) {
+                if ((*x).first == key) {
                     break;
                 }
             }
             return x;
         }
+        /*!
+         * Delete key
+         * @param key that you want to delete
+         */
+        void erase(Key key);
 
         /*!
          * Default destructor
@@ -253,6 +258,8 @@ namespace My_table {
         ~Table(){
             delete [] mas;
         };
+
+
     };
 
 
@@ -282,6 +289,24 @@ namespace My_table {
         mas = new_mas;
         mas[n] = new_elem;
         n++;
+    }
+    template<typename Key, typename Info>
+    void Table<Key,Info>::erase(Key key) {
+        int k=0;
+        int i;
+        std::pair<Key, Info>* new_mas;
+        iterator t=find(key);
+        if(t!= this->end()){
+            new_mas = new std::pair<Key, Info>[n - 1];
+            for (i=0;i<n;i++) {
+                if ((*t) !=mas[i]){
+                    new_mas[k]=mas[i];
+                    k++;
+                }
+            }
+        }
+        delete[] mas;
+        mas=new_mas;
     }
 
 }
