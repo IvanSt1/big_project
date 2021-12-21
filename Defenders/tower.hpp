@@ -38,8 +38,12 @@ public:
         coor = p;
     }
 
-    void levelup() override {
-
+    void levelup( std::vector<int> &table) override {
+            level++;
+        price = table.at(0);
+        radius = table.at(1);
+        damage = table.at(2);
+        speed = table.at(3);
     }
 
     bool dist(std::pair<int, int> pair1, std::pair<int, int> pair2) const {
@@ -49,7 +53,9 @@ public:
     int get_damage(int) override {
         return 0;
     }
-
+    int get_level() const{
+        return level;
+    }
     void atack(std::vector<Enemy::Enemies *> &enemies, int &money) override {
         int i, choice, hp;
         auto j = enemies.begin();

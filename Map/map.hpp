@@ -53,10 +53,11 @@ namespace map1 {
         int get_max_y() const {return max_x;};
         std::vector<Enemy::Enemies*> get_enemies() const{return enemies;};
         Map(int x1, int y1);
-        Map(int x1,int y1, int t);
+
         void resize(int x1, int y1);
+        std::vector<Tower*>::iterator find(int x, int y);
         void play();
-        void play(int n, bool t, bool w, int x, int y);
+        void play(int n, bool t, bool w,bool u, int x, int y);
         ~Map();
         int get_hp() const {return hp;};
         int get_money() const {return money;};

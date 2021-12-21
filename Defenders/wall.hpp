@@ -30,7 +30,7 @@ namespace wall {
             }
         }
         void atack(std::vector<Enemy::Enemies *>&, int &) override{};
-        void levelup() override{}
+        void levelup( std::vector<int> &table) override{}
     };
 }
 #endif //BIG_PROJECT_WALL_HPP

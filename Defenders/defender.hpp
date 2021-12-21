@@ -22,7 +22,7 @@ namespace Defend {
 
         virtual void atack(std::vector<Enemy::Enemies*> &, int &) = 0;
 
-        virtual void levelup() = 0;
+        virtual void levelup( std::vector<int> &table) = 0;
     };
 }
 #endif //BIG_PROJECT_DEFENDER_HPP
