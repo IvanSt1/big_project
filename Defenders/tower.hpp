@@ -1,6 +1,3 @@
-//
-// Created by ivan on 27.11.2021.
-//
 
 #ifndef BIG_PROJECT_TOWER_HPP
 #define BIG_PROJECT_TOWER_HPP
@@ -63,7 +60,7 @@ public:
         while (i < speed && j != enemies.end()) {
             if (dist(coor, (*j)->get_coor())) {
                 choice=(*j)->get_damage(damage);
-                hp=(*j)->get_hp();
+
                 if ((*j)->get_hp()<=0 and choice==0) {
                     money += 10;
                     enemies.erase(j);

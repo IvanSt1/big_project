@@ -5,9 +5,9 @@ int main() {
     int x, y;
     x = 15;
     y = 15;
-    bool add_tower=false, add_wall= false, upgrade=false;
-    int x1,y1,x2,y2;
-    sf::RenderWindow window(sf::VideoMode(x * 64+100, y * 64), "Tower_defence");
+    bool add_tower = false, add_wall = false, upgrade = false;
+    int x1, y1, x2, y2;
+    sf::RenderWindow window(sf::VideoMode(x * 64 + 100, y * 64), "Tower_defence");
 
     sf::RectangleShape rectangle(sf::Vector2f(400.f, 150.f));
     rectangle.setFillColor(sf::Color::Red);
@@ -17,15 +17,15 @@ int main() {
 
     sf::Text text_tower("TOWER", font, 50);
     text_tower.setStyle(sf::Text::Bold);
-    text_tower.setPosition(100 ,100);
+    text_tower.setPosition(100, 100);
 
     sf::Text text_wall("WALL", font, 50);
     text_wall.setStyle(sf::Text::Bold);
-    text_wall.setPosition(100,300);
+    text_wall.setPosition(100, 300);
 
     sf::Text text_upgrade("Upgrade", font, 50);
     text_upgrade.setStyle(sf::Text::Bold);
-    text_upgrade.setPosition(100,500);
+    text_upgrade.setPosition(100, 500);
 
 
     sf::Text text_hp("HP", font, 30);
@@ -39,6 +39,7 @@ int main() {
     money.setStyle(sf::Text::Bold);
 
     sf::Sprite sprite, enemy_sprite, potracheno, wall_sprite, tower_sprite;
+
     sf::Image plain_image, water_image, mountain_image, castle_image, lair_image, light_image, heavy_image, plane_image, potracheno_image, wall_image, tower_image;
     plain_image.loadFromFile("../Map/Image/plain.png");
     water_image.loadFromFile("../Map/Image/water.png");
@@ -51,6 +52,7 @@ int main() {
     potracheno_image.loadFromFile("../Map/Image/potracheno.png");
     wall_image.loadFromFile("../Map/Image/Wall.png");
     tower_image.loadFromFile("../Map/Image/Tower.png");
+
     sf::Texture plain_texture, water_texture, mountain_texture, castle_texture, lair_texture, light_texture, heavy_texture, plane_texture, potracheno_texture, wall_texture, tower_texture;
     plain_texture.loadFromImage(plain_image);
     water_texture.loadFromImage(water_image);
@@ -66,10 +68,12 @@ int main() {
 
     wall_sprite.setTexture(wall_texture);
     tower_sprite.setTexture(tower_texture);
+
     potracheno.setTexture(potracheno_texture);
-    potracheno.setPosition(32*x-384,32*y-216);
+    potracheno.setPosition(32 * x - 384, 32 * y - 216);
+
     map1::Map karta(x, y);
-    std::vector<std::pair<int,int>> Cells_with_enemies;
+
     while (window.isOpen()) {
         sf::Event event{};
         while (window.pollEvent(event)) {
@@ -103,7 +107,7 @@ int main() {
                     }
                     sprite.setPosition(j * 64, i * 64);
                     window.draw(sprite);
-                    if(karta.get_map()[j][i].get_defend()!=nullptr ){
+                    if (karta.get_map()[j][i].get_defend() != nullptr) {
                         wall_sprite.setPosition(j * 64, i * 64);
                         window.draw(wall_sprite);
                     }
@@ -131,72 +135,65 @@ int main() {
                 window.draw(enemy_sprite);
             }
 
-            std::vector<Tower*> towers=karta.get_towers();
-            for(auto i: towers){
+            std::vector<Tower *> towers = karta.get_towers();
+            for (auto i: towers) {
                 tower_sprite.setPosition(i->get_coor().first * 64 + 16, i->get_coor().second * 64 + 16);
                 window.draw(tower_sprite);
             }
             text_hp.setFillColor(sf::Color::Red);
-            text_hp.setPosition(64*x+1,50);
+            text_hp.setPosition(64 * x + 1, 50);
             text_money.setFillColor(sf::Color::Red);
-            text_money.setPosition(64*x+1,200);
+            text_money.setPosition(64 * x + 1, 150);
             hp.setString(std::to_string(karta.get_hp()));
             money.setString(std::to_string(karta.get_money()));
 
-            hp.setPosition(64*x+1, 100);
-            money.setPosition(64*x+1, 300);
+            hp.setPosition(64 * x + 1, 100);
+            money.setPosition(64 * x + 1, 200);
             window.draw(hp);
             window.draw(money);
             window.draw(text_hp);
             window.draw(text_money);
             window.display();
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-                x1 =sf::Mouse::getPosition(window).x;
-                y1= sf::Mouse::getPosition(window).y;
+
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                x1 = sf::Mouse::getPosition(window).x;
+                y1 = sf::Mouse::getPosition(window).y;
                 sf::RenderWindow window1(sf::VideoMode(500, 700), "Choose option");
-                while(window1.isOpen()){
+                while (window1.isOpen()) {
                     sf::Event event1{};
                     while (window1.pollEvent(event1)) {
                         if (event1.type == sf::Event::Closed)
                             window1.close();
                     }
 
-                    rectangle.setPosition(50,50);
+                    rectangle.setPosition(50, 50);
                     window1.draw(rectangle);
-                    rectangle.setPosition(50,250);
+                    rectangle.setPosition(50, 250);
                     window1.draw(rectangle);
-                    rectangle.setPosition(50,450);
+                    rectangle.setPosition(50, 450);
                     window1.draw(rectangle);
 
                     window1.draw(text_upgrade);
                     window1.draw(text_tower);
                     window1.draw(text_wall);
                     window1.display();
-                    int z=0;
-                    while(z<200){
-                        z++;
-                    }
-                    if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-                        x2 =sf::Mouse::getPosition(window1).x;
-                        y2= sf::Mouse::getPosition(window1).y;
-                        add_tower=(x2>=50  and x2<=500 and y2>=50 and y2<=200);
-                        add_wall=(x2>=50  and x2<=500 and y2>=250 and y2<=400);
-                        upgrade=(x2>=50  and x2<=500 and y2>=450 and y2<=600);
+                    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                        x2 = sf::Mouse::getPosition(window1).x;
+                        y2 = sf::Mouse::getPosition(window1).y;
+                        add_tower = (x2 >= 50 and x2 <= 500 and y2 >= 50 and y2 <= 200);
+                        add_wall = (x2 >= 50 and x2 <= 500 and y2 >= 250 and y2 <= 400);
+                        upgrade = (x2 >= 50 and x2 <= 500 and y2 >= 450 and y2 <= 600);
                         window1.close();
                     }
                 }
             }
 
 
-            karta.play(1, add_tower, add_wall, upgrade,int(x1/64), int(y1/64));
-            add_tower=false;
-            add_wall= false;
-            upgrade=false;
-        }
-
-
-
-        else{
+            karta.play(1, add_tower, add_wall, upgrade, int(x1 / 64), int(y1 / 64));
+            add_tower = false;
+            add_wall = false;
+            upgrade = false;
+        } else {
             window.clear();
             window.draw(potracheno);
             window.display();

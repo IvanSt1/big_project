@@ -1,6 +1,3 @@
-//
-// Created by ivan on 27.11.2021.
-//
 
 #ifndef BIG_PROJECT_CELL_HPP
 #define BIG_PROJECT_CELL_HPP
@@ -14,7 +11,6 @@ class Cell {
 protected:
     int type = 0;
     std::pair<int, int> coordinate;
-    std::vector<Enemy::Enemies *> en;
     wall::Wall *defend;
     int distance_from_castle;
     int distance_for_plane;
@@ -61,9 +57,7 @@ public:
         return defend;
     }
 
-    std::vector<Enemy::Enemies *>  get_enemies() {
-        return en;
-    }
+
 
     [[nodiscard]] int get_distance() const {
         return distance_from_castle;

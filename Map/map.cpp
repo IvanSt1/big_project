@@ -92,7 +92,7 @@ namespace map1 {
         distance_for_plane();
     }
 
-    void Map::distance() {
+    void Map::distance() { // Алгоритм Дейкстры
         std::vector<Cell> que;
         int x, y, d;
         que.push_back(*C);
@@ -210,7 +210,8 @@ namespace map1 {
             if (x == C->get_coordinate().first and y == C->get_coordinate().second) {
                 hp -= (*e)->get_hp() * (*e)->get_k();
                 e = enemies.erase(e);
-            } else if (Cells[x][y].get_defend() != nullptr and Cells[x][y].get_defend()->get_type() == 1 and (*e)->get_type()==2) {
+            } else if (Cells[x][y].get_defend() != nullptr and Cells[x][y].get_defend()->get_type() == 1 and
+                       (*e)->get_type() == 2) {
                 if (Cells[x][y].get_defend()->get_damage((*e)->get_hp() * (*e)->get_k()) == 0) {
                     Cells[x][y].delete_defend();
                 };
@@ -227,9 +228,6 @@ namespace map1 {
                             break;
                         case 3:
                             t = where_to_go_for_plane(x, y);
-                            break;
-                        case 4:
-                            t = where_to_go(x, y);
                             break;
                     }
                     switch (t) {
@@ -423,21 +421,22 @@ namespace map1 {
     }
 
 
-    std::vector<Tower*>::iterator Map::find(int x, int y){
-        auto i=towers.begin();
-        for( i; i!=towers.end();i++){
-            if( (*i)->get_coor().first==x and (*i)->get_coor().second==y){
+    std::vector<Tower *>::iterator Map::find(int x, int y) {
+        auto i = towers.begin();
+        for (i; i != towers.end(); i++) {
+            if ((*i)->get_coor().first == x and (*i)->get_coor().second == y) {
                 break;
             }
         }
         return i;
     }
+
     void Map::play(int n, bool t, bool w, bool u, int x, int y) {
         int i = 0;
         int price;
         std::vector<int> specification;
         Tower *tower;
-        std::vector<Tower*>::iterator to;
+        std::vector<Tower *>::iterator to;
         auto gen = []() {
             static std::mt19937 rng{std::random_device()()};
             static std::uniform_int_distribution<int> distr(0, 30);
@@ -446,14 +445,14 @@ namespace map1 {
         wall::Wall *wall;
         while (hp > 0 and i < n) {
             int k = gen();
-            if (k == 5) {
+            if (k == 1) {
                 add_enemies(L->spawn(1));
             }
 
             go();
-            to=find(x,y);
-            if (t and (Cells[x][y].get_type() == 1) and (to==towers.end()) ){
-                 price = Tower_Table.find(1)->second[0];
+            to = find(x, y);
+            if (t and (Cells[x][y].get_type() == 1) and (to == towers.end())) {
+                price = Tower_Table.find(1)->second[0];
                 if (money > price) {
                     tower = new Tower(Tower_Table, std::make_pair(x, y));
                     towers.push_back(tower);
@@ -461,8 +460,8 @@ namespace map1 {
                 }
 
             }
-            if (w and (Cells[x][y].get_type() == 1) and (Cells[x][y].get_defend()== nullptr)) {
-                price=150;
+            if (w and (Cells[x][y].get_type() == 1) and (Cells[x][y].get_defend() == nullptr)) {
+                price = 150;
                 if (money > price) {
                     wall = new wall::Wall();
                     Cells[x][y].add_defend(wall);
@@ -471,9 +470,9 @@ namespace map1 {
 
             }
 
-            if (u and to!=towers.end() ){
-                if ((*to)->get_level()<5) {
-                    specification = Tower_Table.find((*to)->get_level()+1)->second;
+            if (u and to != towers.end()) {
+                if ((*to)->get_level() < 5) {
+                    specification = Tower_Table.find((*to)->get_level() + 1)->second;
                     if (money > specification.at(0)) {
                         (*to)->levelup(specification);
                         money -= specification.at(0);
